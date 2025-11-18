@@ -37,6 +37,15 @@
 }
 
 /* ------------------------------------------------------------------- */
-body, html {
+body,
+html {
   font-family: "Vazirmatn", Vazir, Tahoma, Arial, sans-serif;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE و Edge */
+  scrollbar-width: none; /* Firefox */
 }

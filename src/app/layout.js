@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/Footer/Footer";
 import AnnouncementBar from "@/components/AnnouncementBar/AnnouncementBar";
 import CartProvider from "../context/CartContext";
+import CartAddModalWrapper from "@/components/CartAddModalWrapper";
 
 export const metadata = {
   title: "AdiStore",
@@ -14,8 +15,9 @@ export default function RootLayout({ children }) {
     <html lang="fa" dir="rtl">
       <body className="font-vazirmatn bg-white text-gray-900">
         <CartProvider>
+          <CartAddModalWrapper />
           <div className="flex flex-col min-h-screen">
-            <AnnouncementBar />
+            {/* <AnnouncementBar /> */}
             <Header />
             <main>{children}</main>
             <Footer />

@@ -14,7 +14,7 @@ export async function GET(request) {
     if (category) query.category = category;
     if (best === "true") query.isBestSeller = true;
 
-    const limit = best ? 4 : 0;
+    const limit = best ? 0 : 0;
 
     const products = await Product.find(query)
       .sort({ createdAt: -1 })

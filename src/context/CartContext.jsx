@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useReducer, useEffect } from "react";
+import { createContext, useContext, useReducer, useEffect, useState } from "react";
 
 const CartContext = createContext();
 
@@ -61,6 +61,8 @@ function cartReducer(state, action) {
 export default function CartProvider(props) {
   const { children = null } = props || {};
   const [state, dispatch] = useReducer(cartReducer, initialState);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addedProduct, setAddedProduct] = useState(null);
 
   // بارگذاری سبد خرید از localStorage هنگام mount
   useEffect(() => {
@@ -100,6 +102,8 @@ export default function CartProvider(props) {
     }
 
     dispatch({ type: "ADD_TO_CART", payload: normalized });
+    setAddedProduct(normalized);
+    setShowAddModal(true);
   };
 
   const removeFromCart = (id) => {
@@ -122,6 +126,9 @@ export default function CartProvider(props) {
         removeFromCart,
         clearCart,
         updateQuantity,
+        showAddModal,
+        setShowAddModal,
+        addedProduct,
       }}
     >
       {children}

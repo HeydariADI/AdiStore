@@ -4,31 +4,26 @@ import React from "react";
 
 function Category() {
   const categories = [
-    { name: "لپ‌تاپ", slug: "laptop", image: "/images/laptop/2.jpg" },
-    { name: "موبایل", slug: "mobile", image: "/images/mobile/mobile2.jpg" },
+    { name: "لپ‌تاپ", category: "laptop", image: "/images/laptop/2.jpg" },
+    { name: "موبایل", category: "mobile", image: "/images/mobile/mobile2.jpg" },
     {
       name: "هدفون",
-      slug: "headphone",
-      image: "/images/headphone/headphone2.jpg",
+      category: "headphone",
+      image: "/images/headphone/headphone3.jpg",
     },
-    { name: "گجت‌ها", slug: "gadget", image: "/images/game/1.jpg" },
+    { name: "گجت‌ها", category: "game", image: "/images/game/1.jpg" },
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-b from-orange-50 to-white font-vazirmatn">
+    <section className="py-16 relative z-20 -mt-44 shadow-2xl shadow-orange-50 font-vazirmatn">
       <div className="w-11/12 md:w-4/5 mx-auto">
-        {/* <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-12">
-          دسته‌بندی محصولات
-        </h2> */}
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {categories.map((cat) => (
             <Link
-              key={cat.slug}
-              href={`/products/${cat.slug}`}
+              key={cat.category}
+              href={`/products/category/${cat.category}`}
               className="group relative overflow-hidden rounded-3xl shadow-md hover:shadow-xl transition-all duration-500 bg-white"
             >
-              {/* تصویر دسته‌بندی */}
               <div className="relative w-full h-52 md:h-64">
                 <Image
                   src={cat.image}
@@ -36,7 +31,6 @@ function Category() {
                   fill
                   className="object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                {/* لایه گرادیان برای خوانایی بیشتر */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent group-hover:from-black/60 transition-all duration-500"></div>
               </div>
 
@@ -47,7 +41,6 @@ function Category() {
                 </p>
               </div>
 
-              {/* افکت مرزی در hover */}
               <div className="absolute inset-0 border-4 border-transparent group-hover:border-orange-400 rounded-3xl transition-all duration-500"></div>
             </Link>
           ))}

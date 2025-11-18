@@ -2,6 +2,7 @@
   "name": "adistor",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
@@ -11,6 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@next-auth/mongodb-adapter": "^1.1.3",
+    "dotenv": "^17.2.3",
     "kavenegar": "^1.1.4",
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.2",
@@ -20,7 +22,8 @@
     "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "swiper": "^12.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

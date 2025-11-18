@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getBaseUrl } from "@/lib/getBaseUrl";
 import { useCart } from "@/context/CartContext";
 
 export default function ProductsPage() {
   const [allProducts, setAllProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("همه");
   const [priceSort, setPriceSort] = useState("none");
   const { addToCart } = useCart();
 
@@ -47,10 +45,7 @@ export default function ProductsPage() {
     return arr;
   };
 
-  let filteredProducts =
-    selectedCategory === "همه"
-      ? shuffleArray(allProducts)
-      : allProducts.filter((p) => p.category === categoryMap[selectedCategory]);
+  let filteredProducts = shuffleArray(allProducts);
 
   if (priceSort === "asc") filteredProducts.sort((a, b) => a.price - b.price);
   else if (priceSort === "desc")
@@ -58,26 +53,30 @@ export default function ProductsPage() {
 
   return (
     <section className="w-full min-h-screen px-6 py-10 bg-gray-50">
-      <h1 className="text-3xl font-extrabold text-gray-800 mb-10 text-center">
+      {/* <h1 className="text-3xl font-extrabold text-gray-800 mb-10 text-center">
         محصولات
-      </h1>
+      </h1> */}
 
       {/* دسته‌بندی و مرتب‌سازی */}
       <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
         <div className="flex flex-wrap gap-4">
           {categories.map((cat) => (
-            <button
+            <Link
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              href={
+                cat === "همه"
+                  ? "/products"
+                  : `/products/category/${categoryMap[cat]}`
+              }
               className={`w-48 px-6 py-3 text-xl rounded-full border transition-all duration-300 backdrop-blur-md
-                ${
-                  selectedCategory === cat
-                    ? "bg-orange-500 text-white shadow-md scale-105"
-                    : "bg-white/60 text-gray-700 hover:bg-orange-100"
-                }`}
+      ${
+        false
+          ? "bg-orange-500 text-white shadow-md scale-105"
+          : "bg-white/60 text-gray-700 hover:bg-orange-100"
+      }`}
             >
               {cat}
-            </button>
+            </Link>
           ))}
         </div>
 
@@ -102,6 +101,7 @@ export default function ProductsPage() {
               key={product._id}
               className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer overflow-hidden flex flex-col items-center p-6"
             >
+              {/* لینک به صفحه جزئیات محصول */}
               <Link
                 href={`/products/${product._id}`}
                 className="w-full flex flex-col items-center"

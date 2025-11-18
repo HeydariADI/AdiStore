@@ -12,11 +12,11 @@ function Footer() {
       {/* بخش بالا */}
       <div className="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
         {/* ستون ۱ - لوگو و توضیح */}
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           <img
-            src="/images/logo2.png"
+            src="/images/logo/logo4.png"
             alt="Adistor Logo"
-            className="w-28 h-28 object-contain"
+            className="w-28 h-28 object-contain bg-transparent"
           />
           <p className="text-gray-300 text-sm leading-6">
             ادی‌استور، تجربه‌ای هوشمند از خرید دیجیتال. ما بهترین محصولات
@@ -68,7 +68,7 @@ function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <MapPinIcon className="w-5 h-5 text-orange-400" />
-              <span>تهران، خیابان ولیعصر </span>
+              <span>تهران،خیابان ولیعصر،کوچه دیجیتال</span>
             </li>
           </ul>
 

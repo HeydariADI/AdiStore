@@ -1,19 +1,26 @@
-import { products } from "@/data/products"; // آرایه محصولات
+import { NextResponse } from "next/server";
+import connectToDatabase from "../../../../lib/mongodb";
+import Product from "../../../../../models/Products";
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
 
-  const product = products.find((p) => p._id === id);
+  try {
+    await connectToDatabase();
 
-  if (!product) {
-    return new Response(JSON.stringify({ message: "محصول یافت نشد" }), {
-      status: 404,
-      headers: { "Content-Type": "application/json" },
-    });
+    const product = await Product.findById(id).lean();
+
+    if (!product) {
+      return NextResponse.json({ message: "محصول یافت نشد" }, { status: 404 });
+    }
+
+    return NextResponse.json(product);
+  } catch (error) {
+    console.error("❌ Error fetching product by id:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch product", details: error.message },
+      { status: 500 }
+    );
   }
-
-  return new Response(JSON.stringify(product), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
 }

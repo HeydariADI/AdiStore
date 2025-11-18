@@ -1,39 +1,76 @@
-import Link from "next/link";
-import React from "react";
+"use client";
 
-function HeroSection() {
+import { useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+
+export default function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const slides = [
+    {
+      id: 1,
+      title: "بهترین تجربه خرید دیجیتال",
+      text: "گوشی، لپ‌تاپ، لوازم جانبی — همه یکجا!",
+      image: "/images/hero/14.png",
+    },
+    {
+      id: 2,
+      title: "پیشنهاد ویژه این هفته",
+      text: "تخفیف‌های شگفت‌انگیز روی کالاهای دیجیتال",
+      image: "/images/hero/17.png",
+    },
+    {
+      id: 3,
+      title: "جدیدترین محصولات بازار",
+      text: "به‌روزترین مدل‌ها با بهترین قیمت",
+      image: "/images/hero/15.png",
+    },
+  ];
+
+  if (!mounted) {
+    return (
+      <section className="relative w-full h-[550px] md:h-[650px] bg-gray-200 animate-pulse" />
+    );
+  }
+
   return (
-    <section className="w-full  flex flex-col-reverse md:flex-row justify-between items-center p-8 md:p-16 font-vazirmatn relative overflow-hidden bg-gry-50">
-      {/* متن */}
-      <div className="hero-text w-full md:w-1/2 text-center md:text-right mt-8 md:mt-0 md:pr-10 z-10">
-        <h1 className="text-3xl md:text-5xl font-bold text-gray-800 leading-snug mb-6 animate-slideInLeft">
-          تجربه‌ای هوشمند از خرید دیجیتال
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-700 mb-8 animate-slideInLeft delay-200">
-          انتخاب کن، سفارش بده، لذت ببر.
-        </p>
-        <Link href="/products">
-          <button className="bg-amber-500 text-white px-8 py-3 rounded-xl text-lg font-semibold hover:bg-amber-600 hover:scale-105 transition transform shadow-lg">
-            همین حالا خرید کن
-          </button>
-        </Link>
-      </div>
+    <section className="relative w-full h-[550px] md:h-[650px] overflow-hidden bg-amber-50">
+      <Swiper
+        modules={[Autoplay, Pagination]}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        loop={true}
+        className="w-full h-full"
+      >
+        {slides.map((slide) => (
+          <SwiperSlide key={slide.id}>
+            <div className="relative w-full h-full flex items-center justify-center bg-gray-200">
+              <img
+                src={slide.image}
+                alt={slide.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black opacity-40" />
 
-      {/* تصویر */}
-      <div className="w-full md:w-2/3 flex justify-center z-10 ml-10">
-        <img
-          src="/images/1.jpg"
-          alt="خرید دیجیتال"
-          className="w-xl h-xl md:w-xl md:h-xl object-contain rounded-2xl shadow-2xl transform transition duration-700 hover:scale-110 hover:-translate-y-2 bg-"
-        />
-      </div>
-
-      {/* اشکال تزئینی نیمه شفاف */}
-      <div className="absolute top-10 left-10 w-60 h-60 bg-yellow-200 rounded-full opacity-30 animate-pulse -z-10"></div>
-      <div className="absolute bottom-0 right-15 w-80 h-80 bg-orange-300 rounded-full opacity-20 animate-pulse -z-10"></div>
-      <div className="absolute top-1/2 left-1/2 w-40 h-40 bg-yellow-100 rounded-full opacity-40 -z-10 transform -translate-x-1/2 -translate-y-1/2"></div>
+              <div className="absolute flex inset-0  flex-col items-center justify-center text-center text-white font-bold z-10 px-4 ">
+                <h2 className="text-3xl   md:text-5xl font-bold mb-4 drop-shadow-lg">
+                  {slide.title}
+                </h2>
+                <p className="text-lg md:text-2xl drop-shadow-lg ">
+                  {slide.text}
+                </p>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </section>
   );
 }
-
-export default HeroSection;

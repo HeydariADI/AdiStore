@@ -1,20 +1,19 @@
 import ProductsList from "@/components/ProductsList/ProductsList";
 
-// ✅ متادیتا برای SEO
+// متادیتا برای SEO
 export async function generateMetadata({ params }) {
-  const { slug } = params;
+  const { category } = params;
   return {
-    title: `خرید ${slug} | فروشگاه من`,
-    description: `جدیدترین محصولات ${slug} با بهترین قیمت.`,
+    title: `خرید ${category} | فروشگاه من`,
+    description: `جدیدترین محصولات ${category} با بهترین قیمت.`,
   };
 }
 
 export default async function CategoryPage({ params }) {
-  const { slug } = params;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const { category } = params;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-  // ✅ درخواست بر اساس category نه id
-  const res = await fetch(`${baseUrl}/api/products?category=${slug}`, {
+  const res = await fetch(`${baseUrl}/api/products?category=${category}`, {
     next: { revalidate: 60 },
   });
 
@@ -32,9 +31,9 @@ export default async function CategoryPage({ params }) {
 
   return (
     <section className="container mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6 capitalize text-center">{slug}</h1>
-
-      {/* ✅ نمایش تمام محصولات دسته */}
+      <h1 className="text-2xl font-bold mb-6 capitalize text-center">
+        {category}
+      </h1>
       <ProductsList products={products} />
     </section>
   );

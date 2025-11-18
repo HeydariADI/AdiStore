@@ -28,7 +28,7 @@ function StoreBenefits() {
   ];
 
   return (
-    <section className="bg-white py-16 font-vazirmatn">
+    <section className="bg-white py-16 font-vazirmatn mt-20">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
           چرا از ما خرید کنید؟
