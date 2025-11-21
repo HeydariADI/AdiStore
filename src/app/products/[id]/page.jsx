@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "../../../context/CartContext";
 import { useEffect, useState } from "react";
 import { use } from "react";
 
@@ -44,7 +44,9 @@ export default function ProductDetail({ params: paramsPromise }) {
         </div>
       </div>
       <div className="flex-1 flex flex-col gap-6 justify-center">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">{product.title}</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
+          {product.title}
+        </h1>
         <div className="flex items-center gap-2 mb-2">
           <span className="text-base text-gray-500">دسته‌بندی:</span>
           <Link

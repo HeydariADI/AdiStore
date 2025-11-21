@@ -1,9 +1,9 @@
-import Header from "@/components/Header/Header";
+import Header from "../components/Header/Header";
 import "./globals.css";
-import Footer from "@/components/Footer/Footer";
-import AnnouncementBar from "@/components/AnnouncementBar/AnnouncementBar";
+import Footer from "../components/Footer/Footer";
+
 import CartProvider from "../context/CartContext";
-import CartAddModalWrapper from "@/components/CartAddModalWrapper";
+import CartAddModalWrapper from "../components/CartAddModalWrapper";
 
 export const metadata = {
   title: "AdiStore",

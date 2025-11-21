@@ -1,7 +1,7 @@
 "use client";
 
-import { useCart } from "@/context/CartContext";
-import CartAddModal from "@/components/CartAddModal";
+import { useCart } from "../context/CartContext";
+import CartAddModal from "../components/CartAddModal";
 
 export default function CartAddModalWrapper() {
   const { showAddModal, setShowAddModal, addedProduct } = useCart();

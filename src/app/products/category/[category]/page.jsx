@@ -1,4 +1,4 @@
-import ProductsList from "@/components/ProductsList/ProductsList";
+import ProductsList from "components/ProductsList/ProductsList";
 
 // متادیتا برای SEO
 export async function generateMetadata({ params }) {

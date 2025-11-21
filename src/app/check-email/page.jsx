@@ -4,14 +4,21 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function CheckEmailPage() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const email = searchParams.get("email");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!email) setError("ایمیل یافت نشد. لطفاً دوباره تلاش کنید.");
-  }, [email]);
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      const emailParam = searchParams.get("email");
+      if (!emailParam) {
+        setError("ایمیل یافت نشد. لطفاً دوباره تلاش کنید.");
+      } else {
+        setEmail(emailParam);
+      }
+    }
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">

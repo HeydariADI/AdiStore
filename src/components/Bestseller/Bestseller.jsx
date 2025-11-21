@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "../../context/CartContext";
 import { useRef, useState } from "react";
 
 export default function AmazingDeals({ products }) {

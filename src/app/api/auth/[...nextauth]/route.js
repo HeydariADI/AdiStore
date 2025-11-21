@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import connectToDatabase from "@/lib/mongodb";
+import connectToDatabase from "../../../../lib/mongodb";
 import OtpCode from "../../../../../models/OtpCode";
 
 export async function POST(req) {

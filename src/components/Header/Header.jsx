@@ -5,7 +5,7 @@ import React from "react";
 import Navbar from "../Navbar/Navbar";
 import SearchBox from "../SearchBox/SearchBox";
 
-import { useCart } from "@/context/CartContext";
+import { useCart } from "../../context/CartContext";
 import {
   ClipboardDocumentListIcon,
   HomeIcon,

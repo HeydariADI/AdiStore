@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import Kavenegar from "kavenegar";
-import otpCode from "../../../../../models/OtpCode";
+
 import connectToDatabase from "../../../../lib/mongodb";
+import OtpCode from "../../../../../models/OtpCode";
 
 const api = Kavenegar.KavenegarApi({
   apikey: process.env.KAVENEGAR_API_KEY,
@@ -12,14 +13,13 @@ export async function POST(req) {
     await connectToDatabase();
 
     const { phone } = await req.json();
-    if (!phone) {
+    if (!phone)
       return NextResponse.json({ error: "شماره الزامی است" }, { status: 400 });
-    }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-    await otpCode.deleteMany({ phone });
-    await otpCode.create({ phone, code });
+    await OtpCode.deleteMany({ phone });
+    await OtpCode.create({ phone, code });
 
     await new Promise((resolve, reject) => {
       api.Send(
