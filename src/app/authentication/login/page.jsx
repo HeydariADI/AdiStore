@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,23 +17,33 @@ export default function LoginPage() {
     setError("");
 
     try {
+      // ---------------- Email Login ----------------
       if (method === "email") {
         const res = await signIn("email", { email: value, redirect: false });
         if (res?.error) setError(res.error);
         else router.push(`/check-email?email=${encodeURIComponent(value)}`);
-      } else {
-        const response = await fetch("/api/otp/send", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phone: value }),
-        });
+        return;
+      }
 
-        if (response.ok) {
-          router.push(`/verify-otp?phone=${encodeURIComponent(value)}`);
-        } else {
-          const data = await response.json();
-          setError(data.error || "خطایی رخ داد.");
-        }
+      // ---------------- Phone Validation ----------------
+      if (!/^09\d{9}$/.test(value)) {
+        setError("شماره موبایل معتبر نیست");
+        setIsLoading(false);
+        return;
+      }
+
+      // ---------------- Send OTP ----------------
+      const response = await fetch("/api/otp/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: value }),
+      });
+
+      if (response.ok) {
+        router.push(`/verify-otp?phone=${encodeURIComponent(value)}`);
+      } else {
+        const data = await response.json();
+        setError(data.error || "خطایی رخ داد.");
       }
     } catch (err) {
       setError("خطای شبکه یا سرور.");
@@ -51,6 +60,7 @@ export default function LoginPage() {
             ورود به حساب
           </h2>
 
+          {/*  انتخاب روش */}
           <div className="flex gap-2 mb-6 justify-center">
             <button
               onClick={() => setMethod("email")}
@@ -79,6 +89,7 @@ export default function LoginPage() {
             <p className="text-red-500 text-sm text-center mb-4">{error}</p>
           )}
 
+          {/*  فرم ورود */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type={method === "email" ? "email" : "tel"}
@@ -106,8 +117,12 @@ export default function LoginPage() {
             </button>
           </form>
 
+          {/*  Google Login  */}
           <div className="flex gap-4 mt-6 justify-center">
-            <button className="flex-1 bg-white border border-gray-300 py-3 sm:py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition text-lg sm:text-xl">
+            <button
+              onClick={() => signIn("google")}
+              className="flex-1 bg-white border border-gray-300 py-3 sm:py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition text-lg sm:text-xl"
+            >
               Google
             </button>
           </div>

@@ -5,38 +5,35 @@ import OtpCode from "../../../../../models/OtpCode";
 export async function POST(req) {
   try {
     await connectToDatabase();
-    const { phone, enteredCode } = await req.json();
 
-    if (!phone || !enteredCode) {
+    const { phone, code } = await req.json();
+
+    if (!phone || !code) {
       return NextResponse.json(
-        { error: "شماره موبایل و کد الزامی هستند" },
+        { error: "شماره و کد الزامی هستند" },
         { status: 400 }
       );
     }
 
-    const storedOtp = await OtpCode.findOne({
-      phone,
-      code: enteredCode,
-    });
+    const storedOtp = await OtpCode.findOne({ phone, code });
 
-    if (!storedOtp) {
+    if (!storedOtp)
       return NextResponse.json(
         { error: "کد نامعتبر یا منقضی شده است" },
         { status: 401 }
       );
-    }
 
-    // کد معتبر است - حذف کد استفاده شده
+    // حذف پس از استفاده
     await OtpCode.deleteOne({ _id: storedOtp._id });
 
     return NextResponse.json({
-      success: true,
-      message: "کد با موفقیت تایید شد",
+      valid: true,
+      message: "تأیید موفقیت‌آمیز",
     });
-  } catch (error) {
-    console.error("Error verifying OTP:", error);
+  } catch (e) {
+    console.error("خطا در تأیید OTP:", e);
     return NextResponse.json(
-      { error: "خطای سرور در تایید کد" },
+      { error: "خطای سرور در هنگام تأیید کد" },
       { status: 500 }
     );
   }
