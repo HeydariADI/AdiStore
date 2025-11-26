@@ -2,24 +2,27 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const sessionData = useSession(); // useSession رو یکبار ذخیره می‌کنیم
+  const session = sessionData?.data;
+  const status = sessionData?.status;
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (status === "loading") return; // هنوز session آماده نیست
 
     if (!session) {
-      router.push("/authentication/login");
+      router.push("/authentication/login"); // ریدایرکت به صفحه لاگین
     } else {
-      setLoading(false);
+      setLoading(false); // session آماده است
     }
   }, [session, status, router]);
 
-  // قبل از دسترسی به session چک میکنیم
+  // نمایش loading تا session آماده شود
   if (status === "loading" || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -28,7 +31,8 @@ export default function DashboardPage() {
     );
   }
 
-  if (!session) return null; // فقط برای ایمنی
+  // ایمنی اضافی: اگر session موجود نبود، صفحه خالی باشه
+  if (!session) return null;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
