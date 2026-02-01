@@ -16,7 +16,7 @@
     "kavenegar": "^1.1.4",
     "mongodb": "^6.21.0",
     "mongoose": "^8.19.2",
-    "next": "15.5.0",
+    "next": "^16.1.6",
     "next-auth": "^4.24.13",
     "nodemailer": "^7.0.10",
     "postcss": "^8.5.6",
