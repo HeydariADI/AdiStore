@@ -3,8 +3,7 @@ import connectToDatabase from "../../../../lib/mongodb";
 import Product from "../../../../../models/Products";
 
 export async function GET(request, { params }) {
-  const resolvedParams = await params;
-  const { id } = resolvedParams;
+  const { id } = params; // بدون await
 
   try {
     await connectToDatabase();

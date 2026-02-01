@@ -1,4 +1,3 @@
-// src/models/Product.js
 import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema({
@@ -10,8 +9,7 @@ const ProductSchema = new mongoose.Schema({
   isBestSeller: { type: Boolean, default: false },
 });
 
-// درست: بررسی مدل موجود و در غیر این صورت ایجاد مدل جدید
 const Product =
-  mongoose.models.Products || mongoose.model("Products", ProductSchema);
+  mongoose.models.Product || mongoose.model("Product", ProductSchema);
 
 export default Product;

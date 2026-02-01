@@ -1,9 +1,8 @@
 import Header from "../components/Header/Header";
-import "./globals.css";
 import Footer from "../components/Footer/Footer";
+import "./globals.css";
 
-import CartProvider from "../context/CartContext";
-import CartAddModalWrapper from "../components/CartAddModalWrapper";
+import Providers from "./providers";
 
 export const metadata = {
   title: "AdiStore",
@@ -14,15 +13,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl">
       <body className="font-vazirmatn bg-white text-gray-900">
-        <CartProvider>
-          <CartAddModalWrapper />
+        <Providers>
           <div className="flex flex-col min-h-screen">
-            {/* <AnnouncementBar /> */}
             <Header />
             <main>{children}</main>
             <Footer />
           </div>
-        </CartProvider>
+        </Providers>
       </body>
     </html>
   );

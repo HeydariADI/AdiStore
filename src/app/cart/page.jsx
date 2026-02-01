@@ -3,105 +3,144 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../context/CartContext";
 
-export default function CartPage() {
-  const { cart, removeFromCart, clearCart, updateQuantity } = useCart();
+// شبیه‌سازی Auth
+const useAuth = () => {
+  const isLoggedIn = false; // false یعنی کاربر وارد نشده
+  return { isLoggedIn };
+};
+
+function CartPage() {
+  const { cart, updateQuantity, removeFromCart } = useCart();
   const router = useRouter();
+  const { isLoggedIn } = useAuth();
+
+  const total = cart.reduce(
+    (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
+    0
+  );
+
+  const handleContinue = () => {
+    if (isLoggedIn) {
+      router.push("/checkout");
+    } else {
+      router.push("authentication/login"); // هدایت به صفحه LoginPage
+    }
+  };
 
   if (!cart || cart.length === 0) {
     return (
-      <div className="container mx-auto p-12 text-center">
-        <h1 className="text-3xl font-bold mb-6">سبد خرید</h1>
-        <p className="text-gray-600 text-lg">سبد خرید شما خالی است.</p>
+      <div className="p-20 text-center">
+        <h1 className="text-3xl font-bold">سبد خرید شما خالی است</h1>
       </div>
     );
   }
 
-  const total = cart.reduce(
-    (s, item) => s + (item.price || 0) * (item.quantity || 1),
-    0
-  );
-
   return (
-    <div className="container mx-auto p-12">
-      <h1 className="text-3xl font-bold mb-8">سبد خرید</h1>
+    <div className="cartpage flex flex-col lg:flex-row p-5 mt-4 justify-between items-start gap-6">
+      {/* بخش محصولات (همان UI قبلی شما) */}
+      <div className="w-full lg:w-2/3 p-4 m-1 flex flex-col gap-6">
+        <div className="flex justify-between items-center">
+          <div className="flex justify-center items-center gap-4 ">
+            <h1 className="text-3xl font-bold">سبد خرید شما</h1>
+            <span className="text-xl font-medium">{cart.length} عدد کالا</span>
+          </div>
+        </div>
 
-      <div className="space-y-6">
         {cart.map((item) => (
           <div
-            key={item._id || item.title}
-            className="flex flex-col sm:flex-row items-center justify-between bg-white p-6 rounded-2xl shadow-lg border border-gray-200 transition hover:shadow-xl"
+            key={item._id}
+            className="cartproduct flex flex-col justify-center items-center mt-5 p-10 border border-gray-300 rounded-2xl shadow w-full"
           >
-            <div className="flex items-center gap-6 w-full sm:w-auto">
-              {item.image && (
-                <img
-                  src={item.image}
-                  alt={item.name || item.title}
-                  className="w-24 h-24 object-cover rounded-lg border border-gray-300"
-                />
-              )}
-              <div className="flex flex-col items-start">
-                <p className="font-vazir font-bold text-lg text-gray-900 mb-2">
+            <div className="flex justify-between items-center w-full flex-col lg:flex-row">
+              <div className="cartproduct_info flex-1">
+                <h1 className="text-2xl font-bold p-4">
                   {item.name || item.title}
-                </p>
+                </h1>
+                <ul className="flex flex-col p-5 text-lg gap-5">
+                  <li>🔯 6 ماه گارانتی شرکتی</li>
+                  <li>✔ موجود در انبار </li>
+                </ul>
+              </div>
 
-                {/* کنترل تعداد */}
-                <div className="flex items-center gap-3 mt-2">
-                  <button
-                    onClick={() =>
-                      updateQuantity(
-                        item._id,
-                        Math.max((item.quantity || 1) - 1, 1)
-                      )
-                    }
-                    className="bg-gray-200 px-4 py-2 rounded-lg text-lg font-bold hover:bg-gray-300 transition"
-                  >
-                    -
-                  </button>
-                  <span className="px-4 text-lg font-semibold">
-                    {item.quantity || 1}
-                  </span>
-                  <button
-                    onClick={() =>
-                      updateQuantity(item._id, (item.quantity || 1) + 1)
-                    }
-                    className="bg-gray-200 px-4 py-2 rounded-lg text-lg font-bold hover:bg-gray-300 transition"
-                  >
-                    +
-                  </button>
-                </div>
+              <div className="cartproduct_image w-80 h-80 mt-5 p-4 flex justify-center items-center">
+                <img src={item.image} alt={item.name} className="w-60 h-60" />
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-6 mt-4 sm:mt-0">
-              <p className="font-bold text-gray-700 text-lg">
-                {((item.price || 0) * (item.quantity || 1)).toLocaleString()}{" "}
-                تومان
+            <div className="flex justify-between items-center w-full m-4 p-4 border border-gray-100 shadow rounded-xl flex-col lg:flex-row gap-4">
+              {/* کنترل تعداد */}
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() =>
+                    updateQuantity(item._id, Math.max(item.quantity - 1, 1))
+                  }
+                  className="w-10 h-10 flex justify-center items-center rounded-lg border shadow-sm hover:bg-gray-100"
+                >
+                  ➖
+                </button>
+                <span className="text-lg font-bold">{item.quantity}</span>
+                <button
+                  onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                  className="w-10 h-10 flex justify-center items-center rounded-lg border shadow-sm hover:bg-gray-100"
+                >
+                  ➕
+                </button>
+
+                {/* حذف کالا با Heroicons */}
+                <button
+                  onClick={() => removeFromCart(item._id)}
+                  className="w-10 h-10 flex justify-center items-center rounded-lg border shadow-sm hover:bg-red-100 text-red-500"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* قیمت */}
+              <p className="font-bold text-lg">
+                {((item.price || 0) * item.quantity).toLocaleString()} تومان
               </p>
-              <button
-                onClick={() => removeFromCart(item._id)}
-                className="bg-red-200 text-red-700 px-4 py-2 rounded-lg font-bold hover:bg-red-300 transition"
-              >
-                حذف
-              </button>
+
+              {/* رنگ */}
+              <div className="flex items-center gap-2 border rounded-lg px-3 py-2">
+                <span>مشکی</span>
+                <span className="w-5 h-5 bg-black rounded-sm border"></span>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="mt-10 flex flex-col sm:flex-row justify-between items-center bg-gray-100 p-6 rounded-2xl border border-gray-200">
-        <p className="text-2xl font-bold text-gray-900 font-vazir mb-4 sm:mb-0">
-          جمع کل: {total.toLocaleString()} تومان
-        </p>
-        <div className="flex gap-4">
+      {/* صورتحساب */}
+      <div className="w-full lg:w-1/3 p-10 mb-10">
+        <h1 className="text-3xl font-bold m-10">صورتحساب</h1>
+
+        <div className="border border-gray-200 shadow w-full p-10 flex flex-col gap-10 text-xl">
+          <div className="flex justify-between items-center">
+            <p>قیمت محصول</p>
+            <p>{total.toLocaleString()} ریال</p>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <p className="font-bold">جمع کل</p>
+            <p>{total.toLocaleString()} ریال</p>
+          </div>
+
           <button
-            className="bg-orange-200 text-gray-800 px-6 py-3 rounded-lg font-bold font-vazir transition hover:bg-orange-300"
-            onClick={() => clearCart()}
-          >
-            پاک کردن سبد
-          </button>
-          <button
-            className="bg-orange-600 text-white px-6 py-3 rounded-lg font-bold font-vazir transition hover:bg-orange-700"
-            onClick={() => router.push("/checkout")}
+            onClick={handleContinue}
+            className="bg-orange-500 p-6 rounded-xl text-white text-2xl font-medi w-full hover:bg-orange-600 transition"
           >
             ادامه خرید
           </button>
@@ -110,3 +149,5 @@ export default function CartPage() {
     </div>
   );
 }
+
+export default CartPage;

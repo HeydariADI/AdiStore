@@ -63,10 +63,10 @@ export default function AmazingDeals({ products }) {
             <Link
               key={product._id || Math.random()}
               href={`/products/${product._id}`}
-              className="min-w-[180px] sm:min-w-[220px] md:min-w-[260px] bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden group relative"
+              className="min-w-[180px] sm:min-w-[220px] md:min-w-[260px] bg-white rounded-sm shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden group relative"
             >
               {/* IMAGE */}
-              <div className="relative w-full h-44 sm:h-52 md:h-60 bg-gray-100 rounded-t-2xl overflow-hidden">
+              <div className="relative w-full h-44 sm:h-52 md:h-60 bg-gray-100 rounded-t-none overflow-hidden">
                 <Image
                   src={product.image || "/placeholder.png"}
                   alt={product.name || "تصویر محصول"}

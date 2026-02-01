@@ -33,42 +33,94 @@ export default function ProductDetail({ params: paramsPromise }) {
   if (!product) return <p className="text-center p-10">در حال بارگذاری...</p>;
 
   return (
-    <div className="product-detail container mx-auto py-10 flex flex-col md:flex-row gap-10 font-vazir">
-      <div className="flex-1 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-lg border border-orange-100 p-4 w-full max-w-md flex items-center justify-center group">
+    <div className="container mx-auto py-10 flex flex-col lg:flex-row gap-10 font-vazir">
+      {/* سمت راست: تصویر و جزئیات محصول */}
+      <div className="flex-1 flex flex-col gap-6">
+        {/* تصویر محصول */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 w-full flex items-center justify-center group">
           <img
             src={product.image}
             alt={product.title}
-            className="rounded-xl w-full object-contain h-72 transition-transform duration-300 group-hover:scale-110"
+            className="rounded-xl w-full object-contain h-96 transition-transform duration-300 group-hover:scale-110"
           />
         </div>
+
+        {/* عنوان و دسته‌بندی */}
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800">
+            {product.title}
+          </h1>
+          <div className="flex items-center gap-2 text-gray-500 text-sm">
+            <span>دسته‌بندی:</span>
+            <Link
+              href={`/products/category/${product.category}`}
+              className="text-blue-600 underline"
+            >
+              {product.category}
+            </Link>
+          </div>
+          {product.rating && (
+            <div className="flex items-center gap-2 text-yellow-500 text-sm">
+              <span>⭐ {product.rating}</span>
+              <span>({product.reviewsCount || 0} دیدگاه)</span>
+            </div>
+          )}
+        </div>
+
+        {/* ویژگی‌ها */}
+        <div className="w-full max-w-2xl mt-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-6">ویژگی‌ها</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {product.features ? (
+              Object.entries(product.features).map(([key, value]) => (
+                <div key={key} className="bg-gray-100 rounded-xl p-4">
+                  <p className="text-sm text-gray-500 mb-1">{key}</p>
+                  <p className="font-bold text-gray-800">{value}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">
+                ویژگی‌ای برای این محصول موجود نیست
+              </p>
+            )}
+          </div>
+        </div>
       </div>
-      <div className="flex-1 flex flex-col gap-6 justify-center">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
-          {product.title}
-        </h1>
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-base text-gray-500">دسته‌بندی:</span>
-          <Link
-            href={`/products/category/${product.category}`}
-            className="text-orange-600 underline font-bold text-lg"
-          >
-            {product.category}
-          </Link>
+
+      {/* سمت چپ: فروشنده، قیمت و افزودن به سبد */}
+      <div className="flex-1 flex flex-col gap-6">
+        {/* فروشنده */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-1">
+          <p className="text-gray-700 font-medium">فروشنده</p>
+          <p className="text-blue-600 font-bold">
+            {product.seller || "فروشنده ناشناس"}
+          </p>
+          {product.sellerRating && (
+            <p className="text-green-600 text-sm">
+              {product.sellerRating} عملکرد عالی
+            </p>
+          )}
         </div>
-        <div className="bg-orange-50 rounded-xl p-4 text-gray-700 shadow-sm border border-orange-100">
-          {product.description}
-        </div>
-        <div className="flex items-center gap-6 mt-4">
-          <span className="text-2xl md:text-3xl font-bold text-orange-600 drop-shadow">
+
+        {/* قیمت و افزودن به سبد */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-4">
+          <span className="text-2xl md:text-3xl font-bold text-orange-600">
             {enTofa(product.price)} تومان
           </span>
           <button
             onClick={() => addToCart(product)}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-2xl font-bold shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow transition-all"
           >
             افزودن به سبد خرید
           </button>
+        </div>
+
+        {/* بیمه (اختیاری) */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-2">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" />
+            <span>بیمه تجهیزات دیجیتال - بیمه سامان</span>
+          </label>
         </div>
       </div>
     </div>
