@@ -22,10 +22,10 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
-        const res = await fetch(`${baseUrl}/api/products`, {
+        const res = await fetch("/api/products", {
           cache: "no-store",
         });
+
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
         setAllProducts(data);
