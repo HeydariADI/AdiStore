@@ -81,4 +81,21 @@ export const products = [
     category: "laptop",
     image: "/images/laptop/laptop5.jpg",
   },
+  {
+    title: "Headphone 8",
+    price: 110,
+    description: "Good bass",
+    category: "headphone",
+    image: "/images/headphone/headphone8.jpg",
+  },
+  {
+    _id: {
+      $oid: "6905b8c99c3cdc4668be7dbd",
+    },
+    title: "Game 10",
+    price: 50,
+    description: "Indie game",
+    category: "game",
+    image: "/images/game/game10.jpg",
+  },
 ];

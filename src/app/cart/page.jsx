@@ -5,7 +5,7 @@ import { useCart } from "../../context/CartContext";
 
 // شبیه‌سازی Auth
 const useAuth = () => {
-  const isLoggedIn = false; // false یعنی کاربر وارد نشده
+  const isLoggedIn = false;
   return { isLoggedIn };
 };
 
@@ -16,14 +16,14 @@ function CartPage() {
 
   const total = cart.reduce(
     (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
-    0
+    0,
   );
 
   const handleContinue = () => {
     if (isLoggedIn) {
       router.push("/checkout");
     } else {
-      router.push("authentication/login"); // هدایت به صفحه LoginPage
+      router.push("authentication/login");
     }
   };
 
@@ -37,7 +37,6 @@ function CartPage() {
 
   return (
     <div className="cartpage flex flex-col lg:flex-row p-5 mt-4 justify-between items-start gap-6">
-      {/* بخش محصولات (همان UI قبلی شما) */}
       <div className="w-full lg:w-2/3 p-4 m-1 flex flex-col gap-6">
         <div className="flex justify-between items-center">
           <div className="flex justify-center items-center gap-4 ">
