@@ -1,5 +1,6 @@
 export const products = [
   {
+    id: 1,
     title: "Laptop 3",
     price: 1800,
     description: "Gaming laptop with RTX",
@@ -7,6 +8,7 @@ export const products = [
     image: "/images/laptop/laptop3.jpg",
   },
   {
+    id: 2,
     title: "Mobile 4",
     price: 750,
     description: "Phone with great camera",
@@ -15,6 +17,7 @@ export const products = [
     isBestSeller: true,
   },
   {
+    id: 3,
     title: "Mobile 3",
     price: 600,
     description: "Affordable phone",
@@ -23,6 +26,7 @@ export const products = [
     isBestSeller: true,
   },
   {
+    id: 4,
     title: "Headphone 10",
     price: 210,
     description: "Studio quality",
@@ -30,6 +34,7 @@ export const products = [
     image: "/images/headphone/headphone10.jpg",
   },
   {
+    id: 5,
     title: "Headphone 10",
     price: 210,
     description: "Studio quality",
@@ -37,6 +42,7 @@ export const products = [
     image: "/images/headphone/headphone10.jpg",
   },
   {
+    id: 6,
     title: "Laptop 1",
     price: 1500,
     description: "High performance laptop",
@@ -45,6 +51,7 @@ export const products = [
     isBestSeller: true,
   },
   {
+    id: 7,
     title: "Laptop 2",
     price: 1200,
     description: "Portable and powerful",
@@ -53,6 +60,7 @@ export const products = [
     isBestSeller: true,
   },
   {
+    id: 8,
     title: "Mobile 8",
     price: 720,
     description: "Phone with long battery",
@@ -61,6 +69,7 @@ export const products = [
     isBestSeller: true,
   },
   {
+    id: 9,
     title: "Game 7",
     price: 45,
     description: "Casual game",
@@ -68,6 +77,7 @@ export const products = [
     image: "/images/game/game7.jpg",
   },
   {
+    id: 10,
     title: "Headphone 7",
     price: 170,
     description: "Over-ear premium",
@@ -75,6 +85,7 @@ export const products = [
     image: "/images/headphone/headphone7.jpg",
   },
   {
+    id: 11,
     title: "Laptop 5",
     price: 2000,
     description: "Premium ultrabook",
@@ -82,6 +93,7 @@ export const products = [
     image: "/images/laptop/laptop5.jpg",
   },
   {
+    id: 12,
     title: "Headphone 8",
     price: 110,
     description: "Good bass",
@@ -89,9 +101,7 @@ export const products = [
     image: "/images/headphone/headphone8.jpg",
   },
   {
-    _id: {
-      $oid: "6905b8c99c3cdc4668be7dbd",
-    },
+    id: 13,
     title: "Game 10",
     price: 50,
     description: "Indie game",
