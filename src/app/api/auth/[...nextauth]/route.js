@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import clientPromise from "../../../../lib/mongodb";
+import clientPromise from "@lib/mongodb";
 
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),

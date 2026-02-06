@@ -1,19 +1,35 @@
-//
-
 import { NextResponse } from "next/server";
-import { products } from "../../../db/products";
+import connectToDatabase from "@lib/mongodb";
+import Product from "@models/Products";
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const category = searchParams.get("category");
-  const best = searchParams.get("best");
+  try {
+    console.log("🔵 API /api/products - شروع درخواست");
+    
+    await connectToDatabase();
+    console.log("✅ MongoDB متصل شد");
 
-  let result = products;
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get("category");
+    const best = searchParams.get("best");
 
-  if (category) result = result.filter((p) => p.category === category);
-  if (best === "true") result = result.filter((p) => p.isBestSeller === true);
+    console.log("📝 Query parameters:", { category, best });
 
-  console.log("🟢 Local products:", result.length);
+    let query = {};
+    if (category) query.category = category;
+    if (best === "true") query.isBestSeller = true;
 
-  return NextResponse.json(result);
+    console.log("🔍 MongoDB Query:", query);
+
+    const products = await Product.find(query);
+    console.log(`✅ ${products.length} محصول دریافت شد`);
+
+    return NextResponse.json(products);
+  } catch (error) {
+    console.error("❌ Error in /api/products:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch products", details: error.message },
+      { status: 500 }
+    );
+  }
 }

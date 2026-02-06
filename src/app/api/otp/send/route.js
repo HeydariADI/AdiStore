@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Kavenegar from "kavenegar";
-import connectToDatabase from "../../../../lib/mongodb";
-import OtpCode from "../../../../../models/OtpCode";
+import connectToDatabase from "@lib/mongodb";
+import OtpCode from "@models/OtpCode";
 
 const api = Kavenegar.KavenegarApi({ apikey: process.env.KAVENEGAR_API_KEY });
 

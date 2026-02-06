@@ -1,14 +1,14 @@
 export const dynamic = "force-dynamic";
 
-import connectToDatabase from "../../../lib/mongodb";
-import Blog from "../../../../models/Blog";
+import connectToDatabase from "@lib/mongodb";
+import Blog from "@models/Blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
 export default async function ReadablePage({ params }) {
   try {
     await connectToDatabase();
-    const { slug } = params;
+    const { slug } = await params;
 
     // مقاله اصلی
     const article = await Blog.findOne({ slug }).lean();

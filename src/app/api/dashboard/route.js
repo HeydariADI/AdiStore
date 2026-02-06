@@ -1,6 +1,6 @@
-import connectToDatabase from "../../../lib/mongodb";
-import User from "../../../../models/User";
-import Order from "../../../../models/Order";
+import connectToDatabase from "@lib/mongodb";
+import User from "@models/User";
+import Order from "@models/Order";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 

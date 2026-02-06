@@ -13,7 +13,6 @@ function Navbar() {
         <Link href="/products">محصولات</Link>
         <Link href="/about">درباره ما</Link>
         <Link href="/contact">تماس با ما</Link>
-        <Link href="/newcart">cart</Link>
       </div>
 
       <button

@@ -2,7 +2,7 @@ import ProductsList from "components/ProductsList/ProductsList";
 
 // متادیتا برای SEO
 export async function generateMetadata({ params }) {
-  const { category } = params;
+  const { category } = await params;
   return {
     title: `خرید ${category} | فروشگاه من`,
     description: `جدیدترین محصولات ${category} با بهترین قیمت.`,
@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function CategoryPage({ params }) {
-  const { category } = params;
+  const { category } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   const res = await fetch(`${baseUrl}/api/products?category=${category}`, {
