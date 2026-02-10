@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useCart } from "../context/CartContext";
 
 function enTofa(num) {
@@ -12,7 +12,20 @@ function enTofa(num) {
 export default function CartAddModal({ show, product, onClose }) {
   const { cart, updateQuantity, removeFromCart, setShowAddModal } = useCart();
 
-  if (!show || !product) return null;
+  useEffect(() => {
+    console.log("CartAddModal rendered with:", {
+      show,
+      product: product?.title,
+    });
+  }, [show, product]);
+
+  if (!show || !product) {
+    console.log("CartAddModal returning null:", {
+      show,
+      hasProduct: !!product,
+    });
+    return null;
+  }
 
   const cartItem = cart.find((i) => i._id === product._id) || { quantity: 1 };
   const qty = cartItem.quantity || 1;

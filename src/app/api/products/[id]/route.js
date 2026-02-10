@@ -4,36 +4,30 @@ import Product from "@models/Products";
 import mongoose from "mongoose";
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const { id } = await Promise.resolve(params);
 
   try {
     await connectToDatabase();
 
-    console.log(`🔍 جستجو برای محصول با id: ${id}`);
-
     let product = null;
 
-    // سعی کنید از findById استفاده کنید (در صورتی که id یک ObjectId معتبر باشد)
+    // اگر ObjectId بود
     if (mongoose.Types.ObjectId.isValid(id)) {
-      try {
-        product = await Product.findById(id);
-        if (product) {
-          console.log(`✅ محصول پیدا شد توسط findById`);
-          return NextResponse.json(product.toObject());
-        }
-      } catch (err) {
-        console.log(`⚠️ findById خطا: ${err.message}`);
-      }
+      product = await Product.findById(id);
     }
 
-    // اگر محصول پیدا نشد
-    console.log(`❌ محصول یافت نشد برای id: ${id}`);
-    return NextResponse.json({ message: "محصول یافت نشد" }, { status: 404 });
+    // اگر با slug بود
+    if (!product) {
+      product = await Product.findOne({ slug: id });
+    }
+
+    if (!product) {
+      return NextResponse.json({ message: "محصول یافت نشد" }, { status: 404 });
+    }
+
+    return NextResponse.json(product);
   } catch (error) {
-    console.error("❌ Server error:", error.message);
-    return NextResponse.json(
-      { error: "Failed to fetch product", details: error.message },
-      { status: 500 }
-    );
+    console.error("❌ API ERROR:", error);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 
+// نمونه‌ی دیتابیس (میتونی از MongoDB یا فایل lib/articles.js بخونی)
 export const articles = [
   {
     slug: "tech-trends-2025",
-    title: "۵ ترند مهم تکنولوژی در ۲۰۲۵",
+    title: "10 ترند مهم تکنولوژی در ۲۰۲۵",
     image: "/images/read/1.png",
   },
   {
@@ -46,12 +48,15 @@ export default function Readables() {
                   style={{ backgroundImage: `url(${article.image})` }}
                 ></div>
 
-                {/* تیتر روی تصویر */}
+                {/* overlay برای تار کردن پس‌زمینه */}
                 <div className="absolute inset-0 bg-black/40 flex items-end p-4">
-                  <h3 className="text-white text-lg font-bold line-clamp-2">
+                  <h3 className="text-white text-lg md:text-xl font-bold line-clamp-2">
                     {article.title}
                   </h3>
                 </div>
+
+                {/* افکت hover روی border */}
+                <div className="absolute inset-0 border-4 border-transparent group-hover:border-orange-400 rounded-2xl transition-all duration-500"></div>
               </div>
             </Link>
           ))}

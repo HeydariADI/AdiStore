@@ -1,9 +1,13 @@
 "use client";
 
+import { use, useEffect, useState } from "react";
+import { useCart } from "@/context/CartContext";
 import Link from "next/link";
-import { useCart } from "../../../context/CartContext";
-import { useEffect, useState } from "react";
-import { use } from "react";
+import {
+  BuildingStorefrontIcon,
+  TruckIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 
 function enTofa(num) {
   if (typeof num !== "number") return num;
@@ -11,38 +15,34 @@ function enTofa(num) {
   return num.toString().replace(/\d/g, (d) => farsiDigits[d]);
 }
 
-export default function ProductDetail({ params: paramsPromise }) {
-  const params = use(paramsPromise);
-  const { id } = params;
+export default function ProductDetail({ params }) {
+  const { id } = use(params);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-        console.log(`🔍 Fetching from: ${baseUrl}/api/products/${id}`);
-        
-        const res = await fetch(`${baseUrl}/api/products/${id}`);
-        console.log(`📊 Response status: ${res.status}`);
-        
-        if (res.ok) {
-          const data = await res.json();
-          console.log(`✅ محصول دریافت شد:`, data);
-          setProduct(data);
-        } else {
-          const errorText = await res.text();
-          console.error(`❌ Failed to fetch product - Status: ${res.status}`);
-          console.error(`❌ Response: ${errorText}`);
+        const res = await fetch(`/api/products/${id}`, { cache: "no-store" });
+
+        if (!res.ok) {
+          setProduct(null);
+          return;
         }
-      } catch (error) {
-        console.error("❌ Error fetching product:", error);
+
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        console.error("خطا:", err);
+        setProduct(null);
       } finally {
         setLoading(false);
       }
     };
+
     fetchProduct();
   }, [id]);
 
@@ -50,211 +50,109 @@ export default function ProductDetail({ params: paramsPromise }) {
   if (!product) return <p className="text-center p-10">محصول یافت نشد 😢</p>;
 
   return (
-    <div className="container mx-auto py-10 flex flex-col lg:flex-row gap-10 font-vazir">
-      {/* سمت راست: تصویر و جزئیات محصول */}
-      <div className="flex-1 flex flex-col gap-6">
-        {/* تصویر محصول */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 w-full flex items-center justify-center group">
-          <img
-            src={product.image}
-            alt={product.title}
-            className="rounded-xl w-full object-contain h-96 transition-transform duration-300 group-hover:scale-110"
-          />
-        </div>
+    <div className="w-full bg-gray-50">
+      <div className="mx-auto px-4 py-8 font-vazirmatn max-w-full 2xl:max-w-[1700px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* تصویر */}
+          <div className="lg:col-span-4">
+            <div className="bg-white rounded-xl shadow p-6 flex justify-center items-center">
+              <img
+                src={product.image}
+                alt={product.title}
+                className="h-[350px] lg:h-[420px] object-contain"
+              />
+            </div>
+          </div>
 
-        {/* عنوان و دسته‌بندی */}
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800">
-            {product.title}
-          </h1>
-          <div className="flex items-center gap-2 text-gray-500 text-sm">
-            <span>دسته‌بندی:</span>
+          {/* اطلاعات و ویژگی‌ها */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            <h1 className="text-xl lg:text-2xl font-bold leading-8">
+              {product.title}
+            </h1>
+
             <Link
-              href={`/products/category/${product.category}`}
-              className="text-blue-600 underline"
+              href={`/products/${product.category}`}
+              className="text-blue-600 text-sm"
             >
               {product.category}
             </Link>
-          </div>
-          {product.rating && (
-            <div className="flex items-center gap-2 text-yellow-500 text-sm">
-              <span>⭐ {product.rating}</span>
-              <span>({product.reviewsCount || 0} دیدگاه)</span>
-            </div>
-          )}
-        </div>
 
-        {/* ویژگی‌ها */}
-        <div className="w-full max-w-2xl mt-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-6">ویژگی‌ها</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {product.features ? (
-              Object.entries(product.features).map(([key, value]) => (
-                <div key={key} className="bg-gray-100 rounded-xl p-4">
-                  <p className="text-sm text-gray-500 mb-1">{key}</p>
-                  <p className="font-bold text-gray-800">{value}</p>
+            {product.features && (
+              <div>
+                <h2 className="font-bold mt-4 mb-3">ویژگی‌ها</h2>
+                <div className="grid grid-cols-2 gap-3">
+                  {Object.entries(product.features).map(([k, v]) => (
+                    <div key={k} className="bg-gray-100 p-3 rounded-lg">
+                      <p className="text-xs text-gray-500">{k}</p>
+                      <p className="font-bold text-sm">{v}</p>
+                    </div>
+                  ))}
                 </div>
-              ))
-            ) : (
-              <p className="text-gray-500">
-                ویژگی‌ای برای این محصول موجود نیست
-              </p>
+              </div>
             )}
           </div>
+
+          {/* بخش خرید */}
+          <div className="lg:col-span-3  rounded-xl shadow p-5">
+            <div className="bg-white rounded-xl shadow p-5 sticky top-24 flex flex-col gap-10">
+              {/* فروشنده */}
+              <div className="flex flex-col items-start gap-2">
+                <p className="text-xl font-semibold ">فروشنده</p>
+
+                <p className="font-bold flex items-center gap-2 mt-4">
+                  <BuildingStorefrontIcon className="w-6 h-6 text-gray-500" />
+                  {product.seller || "فروشگاه ادی استور"}
+                </p>
+              </div>
+
+              {/* قیمت */}
+              <div className="border-t pt-4">
+                <p className="text-2xl font-bold text-orange-600">
+                  {enTofa(product.price)} تومان
+                </p>
+              </div>
+
+              {/* افزودن به سبد خرید */}
+              <button
+                onClick={() => addToCart(product)}
+                className="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-3 rounded-xl"
+              >
+                افزودن به سبد خرید
+              </button>
+
+              {/* روش و هزینه ارسال */}
+              <button
+                onClick={() => setModalOpen(true)}
+                className="mt-4 text-blue-600 font-semibold flex items-center gap-2 hover:underline"
+              >
+                <TruckIcon className="w-5 h-5" /> روش و هزینه ارسال
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* سمت چپ: فروشنده، قیمت و افزودن به سبد */}
-      <div className="flex-1 flex flex-col gap-6">
-        {/* فروشنده */}
-        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-1">
-          <p className="text-gray-700 font-medium">فروشنده</p>
-          <p className="text-blue-600 font-bold">
-            {product.seller || "فروشنده ناشناس"}
-          </p>
-          {product.sellerRating && (
-            <p className="text-green-600 text-sm">
-              {product.sellerRating} عملکرد عالی
-            </p>
-          )}
-        </div>
+      {/* مودال ارسال */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-5">
+          <div className="bg-white rounded-xl shadow-lg w-11/12 max-w-md p-10 relative animate-fadeIn">
+            {/* دکمه بستن */}
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+            >
+              <XMarkIcon className="w-6 h-6" />
+            </button>
 
-        {/* قیمت و افزودن به سبد */}
-        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-4">
-          <span className="text-2xl md:text-3xl font-bold text-orange-600">
-            {enTofa(product.price)} تومان
-          </span>
-          <button
-            onClick={() => addToCart(product)}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow transition-all"
-          >
-            افزودن به سبد خرید
-          </button>
+            <h2 className="text-lg font-bold mb-4">روش‌ها و هزینه ارسال</h2>
+            <ul className="flex flex-col gap-3 text-gray-700">
+              <li>🚚 پست پیشتاز: ۲۰,۰۰۰ تومان - ۲ تا ۳ روز کاری</li>
+              <li>🏍️ پیک ویژه: ۳۰,۰۰۰ تومان - ۱ روز کاری (فقط شهر تهران)</li>
+              <li>📦 تحویل فروشگاه: رایگان</li>
+            </ul>
+          </div>
         </div>
-
-        {/* بیمه (اختیاری) */}
-        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-2">
-          <label className="flex items-center gap-2">
-            <input type="checkbox" />
-            <span>بیمه تجهیزات دیجیتال - بیمه سامان</span>
-          </label>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
-
-// "use client";
-
-// import Link from "next/link";
-// import { useCart } from "../../../context/CartContext";
-// import { useEffect, useState } from "react";
-// import { use } from "react";
-// import { products } from "../../db/products";
-
-// function enTofa(num) {
-//   if (typeof num !== "number") return num;
-//   const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
-//   return num.toString().replace(/\d/g, (d) => farsiDigits[d]);
-// }
-
-// export default function ProductDetail({ params: paramsPromise }) {
-//   const params = use(paramsPromise);
-//   const { id } = params;
-//   const [product, setProduct] = useState(null);
-//   const { addToCart } = useCart();
-
-//   useEffect(() => {
-//     const fetchProduct = async () => {
-//       const found = products.find((p) => p._id === id);
-//       setProduct(found || null);
-//     };
-//     fetchProduct();
-//   }, [id]);
-
-//   if (!product) return <p className="text-center p-10">در حال بارگذاری...</p>;
-
-//   return (
-//     <div className="container mx-auto py-10 flex flex-col lg:flex-row gap-10 font-vazir">
-//       {/* سمت راست: تصویر و جزئیات محصول */}
-//       <div className="flex-1 flex flex-col gap-6">
-//         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 w-full flex items-center justify-center group">
-//           <img
-//             src={product.image}
-//             alt={product.title}
-//             className="rounded-xl w-full object-contain h-96 transition-transform duration-300 group-hover:scale-110"
-//           />
-//         </div>
-//         <div className="flex flex-col gap-2">
-//           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800">
-//             {product.title}
-//           </h1>
-//           <div className="flex items-center gap-2 text-gray-500 text-sm">
-//             <span>دسته‌بندی:</span>
-//             <Link
-//               href={`/products/category/${product.category}`}
-//               className="text-blue-600 underline"
-//             >
-//               {product.category}
-//             </Link>
-//           </div>
-//           {product.rating && (
-//             <div className="flex items-center gap-2 text-yellow-500 text-sm">
-//               <span>⭐ {product.rating}</span>
-//               <span>({product.reviewsCount || 0} دیدگاه)</span>
-//             </div>
-//           )}
-//         </div>
-//         <div className="w-full max-w-2xl mt-6">
-//           <h2 className="text-xl font-bold text-gray-800 mb-6">ویژگی‌ها</h2>
-//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-//             {product.features ? (
-//               Object.entries(product.features).map(([key, value]) => (
-//                 <div key={key} className="bg-gray-100 rounded-xl p-4">
-//                   <p className="text-sm text-gray-500 mb-1">{key}</p>
-//                   <p className="font-bold text-gray-800">{value}</p>
-//                 </div>
-//               ))
-//             ) : (
-//               <p className="text-gray-500">
-//                 ویژگی‌ای برای این محصول موجود نیست
-//               </p>
-//             )}
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* سمت چپ: فروشنده، قیمت و افزودن به سبد */}
-//       <div className="flex-1 flex flex-col gap-6">
-//         <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-1">
-//           <p className="text-gray-700 font-medium">فروشنده</p>
-//           <p className="text-blue-600 font-bold">
-//             {product.seller || "فروشنده ناشناس"}
-//           </p>
-//           {product.sellerRating && (
-//             <p className="text-green-600 text-sm">
-//               {product.sellerRating} عملکرد عالی
-//             </p>
-//           )}
-//         </div>
-//         <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-4">
-//           <span className="text-2xl md:text-3xl font-bold text-orange-600">
-//             {enTofa(product.price)} تومان
-//           </span>
-//           <button
-//             onClick={() => addToCart(product)}
-//             className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-bold shadow transition-all"
-//           >
-//             افزودن به سبد خرید
-//           </button>
-//         </div>
-//         <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-col gap-2">
-//           <label className="flex items-center gap-2">
-//             <input type="checkbox" />
-//             <span>بیمه تجهیزات دیجیتال - بیمه سامان</span>
-//           </label>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }

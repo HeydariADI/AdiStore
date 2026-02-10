@@ -1,4 +1,4 @@
-// Scripts/showProductIds.mjs
+/
 import { MongoClient } from "mongodb";
 import fs from "fs";
 import path from "path";

@@ -1,144 +1,205 @@
-//
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "../../context/CartContext";
 import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ProductsPage() {
+  const { addToCart } = useCart();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const activeCategory = searchParams.get("category") || "all";
+
   const [priceSort, setPriceSort] = useState("none");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { addToCart } = useCart();
 
-  // Fetch products from API
+  const categories = [
+    { label: "همه", value: "all" },
+    { label: "لپتاپ", value: "laptop" },
+    { label: "موبایل", value: "mobile" },
+    { label: "هدفون", value: "headphone" },
+    { label: "گجت‌ها", value: "game" },
+  ];
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         const res = await fetch("/api/products");
-        if (res.ok) {
-          const data = await res.json();
-          console.log("✅ Products loaded:", data.length);
-          setProducts(data);
-        } else {
-          console.error("❌ Failed to fetch products");
-          setProducts([]);
-        }
-      } catch (error) {
-        console.error("❌ Error fetching products:", error);
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data : data.products || []);
+      } catch {
         setProducts([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
-  const categories = ["همه", "لپتاپ", "موبایل", "هدفون", "گجت‌ها"];
-  const categoryMap = {
-    همه: "all",
-    لپتاپ: "laptop",
-    موبایل: "mobile",
-    هدفون: "headphone",
-    گجت‌ها: "game",
+  // فیلتر و رندوم
+  let filteredProducts =
+    activeCategory === "all"
+      ? [...products]
+      : products.filter((p) => p.category === activeCategory);
+
+  if (activeCategory === "all") {
+    // شفل آرایه (Fisher-Yates)
+    for (let i = filteredProducts.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [filteredProducts[i], filteredProducts[j]] = [
+        filteredProducts[j],
+        filteredProducts[i],
+      ];
+    }
+  }
+
+  // مرتب سازی قیمت
+  if (priceSort === "asc") filteredProducts.sort((a, b) => a.price - b.price);
+  if (priceSort === "desc") filteredProducts.sort((a, b) => b.price - a.price);
+
+  const handleCategoryChange = (cat) => {
+    if (cat === "all") router.push("/products");
+    else router.push(`/products?category=${cat}`);
   };
 
-  let filteredProducts = [...products];
-
-  if (priceSort === "asc") filteredProducts.sort((a, b) => a.price - b.price);
-  else if (priceSort === "desc")
-    filteredProducts.sort((a, b) => b.price - a.price);
-
   return (
-    <section className="w-full min-h-screen px-6 py-10 bg-gray-50">
-      {/* دسته‌بندی و مرتب‌سازی */}
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
-        <div className="flex flex-wrap gap-4">
-          {categories.map((cat) => (
-            <Link
-              key={cat}
-              href={
-                cat === "همه"
-                  ? "/products"
-                  : `/products/category/${categoryMap[cat]}`
-              }
-              className={`w-48 px-6 py-3 text-xl rounded-full border transition-all duration-300 backdrop-blur-md
-                bg-white/60 text-gray-700 hover:bg-orange-100`}
-            >
-              {cat}
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex gap-3 flex-wrap">
-          <select
-            className="border rounded-2xl px-4 py-4"
-            value={priceSort}
-            onChange={(e) => setPriceSort(e.target.value)}
-          >
-            <option value="none">مرتب‌سازی قیمت ندارد</option>
-            <option value="asc">ارزان‌ترین → گران‌ترین</option>
-            <option value="desc">گران‌ترین → ارزان‌ترین</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Loading state */}
-      {loading && (
-        <div className="flex justify-center items-center min-h-96">
-          <div className="text-2xl text-orange-500">درحال بارگذاری...</div>
-        </div>
-      )}
-
-      {/* گرید محصولات */}
-      {!loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
-              <div
-                key={product._id || index}
-                className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:scale-105 transition-all cursor-pointer overflow-hidden flex flex-col items-center p-6"
+    <section className="w-full min-h-screen bg-gray-50">
+      <div className="max-w-full 2xl:max-w-[1700px] mx-auto px-4 py-8">
+        {/* نوار دسته بندی + مرتب سازی */}
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-10">
+          <div className="flex flex-wrap gap-3">
+            {categories.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => handleCategoryChange(cat.value)}
+                className={`
+                  px-4 py-1.5 text-sm
+                  sm:px-5 sm:py-2 sm:text-base
+                  lg:px-6 lg:py-2 lg:text-lg
+                  rounded-full border transition
+                  ${
+                    activeCategory === cat.value
+                      ? "bg-orange-500 text-white"
+                      : "bg-white hover:bg-orange-100"
+                  }
+                `}
               >
-                <Link
-                  href={`/products/${product._id}`}
-                  className="w-full flex flex-col items-center"
-                >
-                  <div className="w-56 h-56 mb-4 flex items-center justify-center bg-white rounded-lg overflow-hidden">
-                    <Image
-                      src={product.image}
-                      alt={product.title}
-                      width={400}
-                      height={400}
-                      className="object-contain rounded-xl"
-                    />
-                  </div>
-                  <h2 className="text-xl font-semibold text-gray-800 text-center">
-                    {product.title}
-                  </h2>
-                  <p className="text-orange-600 font-bold mt-3 text-lg">
-                    {product.price.toLocaleString()} تومان
-                  </p>
-                </Link>
+                {cat.label}
+              </button>
+            ))}
+          </div>
 
-                <button
-                  onClick={() => addToCart(product)}
-                  className="mt-4 w-2/3 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 rounded-2xl transition-colors duration-300"
-                >
-                  اضافه به سبد خرید
-                </button>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500 text-center col-span-full">
-              محصولی یافت نشد 😢
-            </p>
-          )}
+          <div className="relative">
+            <select
+              value={priceSort}
+              onChange={(e) => setPriceSort(e.target.value)}
+              className="
+                appearance-none
+                px-4 py-1.5 text-sm
+                sm:px-5 sm:py-2 sm:text-base
+                lg:px-6 lg:py-2 lg:text-lg
+                rounded-full border
+                bg-white
+                pr-10
+                max-w-[160px] sm:max-w-none
+                focus:outline-none focus:ring-2 focus:ring-orange-400
+                cursor-pointer
+              "
+            >
+              <option value="none">مرتب‌سازی</option>
+              <option value="asc">ارزان‌ترین</option>
+              <option value="desc">گران‌ترین</option>
+            </select>
+
+            <span
+              className="
+                pointer-events-none
+                absolute left-3 top-1/2 -translate-y-1/2
+                text-gray-400 text-xs sm:text-base
+              "
+            >
+              ⇅
+            </span>
+          </div>
         </div>
-      )}
+
+        {/* محصولات */}
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[300px]">
+            <div className="w-16 h-16 border-4 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <div
+            className="
+              grid grid-cols-1
+              sm:grid-cols-2
+              md:grid-cols-3
+              lg:grid-cols-4
+              xl:grid-cols-5
+              gap-8
+            "
+          >
+            {filteredProducts.length ? (
+              filteredProducts.map((product) => {
+                const id = product.slug || product._id || product.id;
+                return (
+                  <div
+                    key={id}
+                    className="bg-white rounded-2xl shadow hover:shadow-xl transition p-5 flex flex-col"
+                  >
+                    <Link
+                      href={`/products/${id}`}
+                      className="flex-1 flex flex-col items-center"
+                    >
+                      <div className="w-full h-48 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden">
+                        <Image
+                          src={product.image}
+                          alt={product.title}
+                          width={300}
+                          height={300}
+                          className="object-contain w-full h-full"
+                          loading="lazy"
+                        />
+                      </div>
+
+                      <h2 className="mt-3 text-center font-semibold line-clamp-2">
+                        {product.title}
+                      </h2>
+
+                      {/* توضیح کوتاه محصول */}
+                      {product.description && (
+                        <p className="mt-1 text-gray-500 text-sm text-center line-clamp-2">
+                          {product.description}
+                        </p>
+                      )}
+                    </Link>
+
+                    <p className="text-orange-600 font-bold mt-3">
+                      {product.price.toLocaleString()} تومان
+                    </p>
+
+                    {/* <button
+    onClick={() => addToCart(product)}
+    className="mt-4 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl transition"
+  >
+    افزودن به سبد خرید
+  </button> */}
+                  </div>
+                );
+              })
+            ) : (
+              <p className="col-span-full text-center text-gray-500">
+                محصولی یافت نشد
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
