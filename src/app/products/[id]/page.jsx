@@ -71,7 +71,7 @@ export default function ProductDetail({ params }) {
             </h1>
 
             <Link
-              href={`/products/${product.category}`}
+              href={`/products/category/${product.category}`}
               className="text-blue-600 text-sm"
             >
               {product.category}

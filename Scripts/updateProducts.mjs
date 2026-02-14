@@ -4,6 +4,16 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+function randomDate() {
+  const now = new Date();
+  const past = new Date();
+  past.setMonth(now.getMonth() - 6); // شش ماه اخیر
+
+  return new Date(
+    past.getTime() + Math.random() * (now.getTime() - past.getTime()),
+  );
+}
+
 // Load .env.local manually
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -561,7 +571,13 @@ async function seedAndUpdate() {
     console.log(`🗑️  ${deleteResult.deletedCount} محصول قدیم حذف شد`);
 
     // اضافه کردن محصولات اولیه
-    const insertResult = await productsCollection.insertMany(products);
+    const productsWithDate = products.map((p) => ({
+      ...p,
+      createdAt: randomDate(),
+    }));
+
+    const insertResult = await productsCollection.insertMany(productsWithDate);
+
     console.log(`✅ ${insertResult.insertedIds.length} محصول جدید اضافه شد`);
 
     // آپدیت ویژگی‌ها

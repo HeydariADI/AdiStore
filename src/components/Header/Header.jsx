@@ -38,13 +38,13 @@ export default function Header() {
       {/* دسکتاپ */}
       <header className="hidden md:block w-full bg-white shadow font-vazirmatn">
         {/* ردیف بالا */}
-        <div className="bg-gray-100">
-          <div className="container mx-auto flex items-center justify-between h-20">
+        <div className="bg-gray-50">
+          <div className="container mx-auto flex items-center justify-between h-24 px-6">
             {/* منو سمت چپ */}
-            <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center gap-8 text-sm">
               <Link
                 href="/orders"
-                className="flex items-center gap-2 hover:text-orange-600"
+                className="flex items-center gap-2 hover:text-orange-600 transition"
               >
                 <ClipboardDocumentListIcon className="w-5 h-5" />
                 سفارش‌ها
@@ -58,7 +58,7 @@ export default function Header() {
               >
                 <Link
                   href="/cart"
-                  className="flex items-center gap-2 hover:text-orange-600"
+                  className="flex items-center gap-2 hover:text-orange-600 transition"
                 >
                   <ShoppingCartIcon className="w-6 h-6" />
                   سبد خرید
@@ -68,37 +68,36 @@ export default function Header() {
                     </span>
                   )}
                 </Link>
-
                 {showCart && <CartPreviewModal />}
               </div>
 
               <Link
                 href="/authentication/login"
-                className="flex items-center gap-2 hover:text-orange-600"
+                className="flex items-center gap-2 hover:text-orange-600 transition"
               >
                 <UserIcon className="w-5 h-5" />
                 ورود
               </Link>
             </div>
 
-            {/* سرچ */}
-            <div className="flex-1 px-4">
+            {/* Search Box مرکزی */}
+            <div className="flex-1 px-6 py-4 max-w-2xl">
               <SearchBox />
             </div>
 
-            {/* لوگو */}
+            {/* لوگو سمت راست */}
             <Link href="/">
               <img
                 src="/images/logo/logo4.png"
                 alt="Adistor"
-                className="w-24"
+                className="w-28"
               />
             </Link>
           </div>
         </div>
 
-        {/* نوبار */}
-        <div className="bg-gray-200">
+        {/* Navbar پایین */}
+        <div className="bg-gray-100">
           <div className="container mx-auto p-3">
             <Navbar />
           </div>

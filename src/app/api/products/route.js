@@ -26,7 +26,10 @@ export async function GET(request) {
     const pathname = url.pathname || "";
     const parts = pathname.split("/").filter(Boolean);
     // Example parts for /api/products/123 -> ['api','products','123']
-    const maybeId = parts.length >= 3 && parts[parts.length - 1] !== "products" ? parts[parts.length - 1] : null;
+    const maybeId =
+      parts.length >= 3 && parts[parts.length - 1] !== "products"
+        ? parts[parts.length - 1]
+        : null;
 
     if (maybeId) {
       // Try to find by MongoDB _id (ObjectId) or by a slug field
@@ -42,7 +45,10 @@ export async function GET(request) {
       }
 
       if (!found) {
-        return NextResponse.json({ error: "Product not found" }, { status: 404 });
+        return NextResponse.json(
+          { error: "Product not found" },
+          { status: 404 },
+        );
       }
 
       return NextResponse.json(found);

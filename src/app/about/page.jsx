@@ -21,7 +21,7 @@ function AboutPage() {
       <section className="container mx-auto px-6 py-16 flex flex-col md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2">
           <Image
-            src="/images/about-us.jpg"
+            src="/images/about.jpg"
             alt="درباره فروشگاه ادی‌استور"
             width={500}
             height={400}

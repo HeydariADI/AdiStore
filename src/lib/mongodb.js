@@ -32,7 +32,7 @@ async function connectToDatabase() {
       .then((mongooseInstance) => {
         console.log(
           "✅ Connected to MongoDB:",
-          mongooseInstance.connection.name
+          mongooseInstance.connection.name,
         );
         return mongooseInstance;
       });

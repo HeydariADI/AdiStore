@@ -13,7 +13,7 @@ export default function ProductsPage() {
 
   const activeCategory = searchParams.get("category") || "all";
 
-  const [priceSort, setPriceSort] = useState("none");
+  const [sortType, setSortType] = useState("default");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,14 +41,14 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  // فیلتر و رندوم
+  // فیلتر
   let filteredProducts =
     activeCategory === "all"
       ? [...products]
       : products.filter((p) => p.category === activeCategory);
 
-  if (activeCategory === "all") {
-    // شفل آرایه (Fisher-Yates)
+  // رندوم فقط وقتی همه و دیفالت
+  if (activeCategory === "all" && sortType === "default") {
     for (let i = filteredProducts.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [filteredProducts[i], filteredProducts[j]] = [
@@ -58,73 +58,96 @@ export default function ProductsPage() {
     }
   }
 
-  // مرتب سازی قیمت
-  if (priceSort === "asc") filteredProducts.sort((a, b) => a.price - b.price);
-  if (priceSort === "desc") filteredProducts.sort((a, b) => b.price - a.price);
+  // مرتب‌سازی
+  if (sortType === "cheap") filteredProducts.sort((a, b) => a.price - b.price);
+  if (sortType === "expensive")
+    filteredProducts.sort((a, b) => b.price - a.price);
+  if (sortType === "popular")
+    filteredProducts.sort((a, b) => (b.reviews || 0) - (a.reviews || 0));
+  if (sortType === "newest")
+    filteredProducts.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+    );
 
   const handleCategoryChange = (cat) => {
+    setSortType("default");
     if (cat === "all") router.push("/products");
     else router.push(`/products?category=${cat}`);
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [sortType, activeCategory]);
+
   return (
     <section className="w-full min-h-screen bg-gray-50">
       <div className="max-w-full 2xl:max-w-[1700px] mx-auto px-4 py-8">
-        {/* نوار دسته بندی + مرتب سازی */}
-        <div className="flex flex-wrap justify-between items-center gap-4 mb-10">
+        {/* نوار بالا */}
+        <div className="flex flex-wrap justify-between items-center gap-6 mb-10">
+          {/* دسته بندی */}
           <div className="flex flex-wrap gap-3">
             {categories.map((cat) => (
               <button
                 key={cat.value}
                 onClick={() => handleCategoryChange(cat.value)}
-                className={`
-                  px-4 py-1.5 text-sm
-                  sm:px-5 sm:py-2 sm:text-base
-                  lg:px-6 lg:py-2 lg:text-lg
-                  rounded-full border transition
-                  ${
-                    activeCategory === cat.value
-                      ? "bg-orange-500 text-white"
-                      : "bg-white hover:bg-orange-100"
-                  }
-                `}
+                className={`px-4 py-1.5 text-sm sm:px-5 sm:py-2 sm:text-base lg:px-6 lg:py-2 lg:text-lg rounded-full border transition ${
+                  activeCategory === cat.value
+                    ? "bg-orange-500 text-white"
+                    : "bg-white hover:bg-orange-100"
+                }`}
               >
                 {cat.label}
               </button>
             ))}
           </div>
 
-          <div className="relative">
-            <select
-              value={priceSort}
-              onChange={(e) => setPriceSort(e.target.value)}
-              className="
-                appearance-none
-                px-4 py-1.5 text-sm
-                sm:px-5 sm:py-2 sm:text-base
-                lg:px-6 lg:py-2 lg:text-lg
-                rounded-full border
-                bg-white
-                pr-10
-                max-w-[160px] sm:max-w-none
-                focus:outline-none focus:ring-2 focus:ring-orange-400
-                cursor-pointer
-              "
-            >
-              <option value="none">مرتب‌سازی</option>
-              <option value="asc">ارزان‌ترین</option>
-              <option value="desc">گران‌ترین</option>
-            </select>
+          {/* مرتب سازی */}
+          <div className="flex items-center gap-6 text-sm lg:text-base">
+            <span className="text-gray-500">مرتب‌سازی:</span>
 
-            <span
-              className="
-                pointer-events-none
-                absolute left-3 top-1/2 -translate-y-1/2
-                text-gray-400 text-xs sm:text-base
-              "
+            <button
+              onClick={() => setSortType("cheap")}
+              className={`transition ${
+                sortType === "cheap"
+                  ? "text-orange-600 font-bold"
+                  : "text-gray-600 hover:text-orange-500"
+              }`}
             >
-              ⇅
-            </span>
+              ارزان‌ترین
+            </button>
+
+            <button
+              onClick={() => setSortType("expensive")}
+              className={`transition ${
+                sortType === "expensive"
+                  ? "text-orange-600 font-bold"
+                  : "text-gray-600 hover:text-orange-500"
+              }`}
+            >
+              گران‌ترین
+            </button>
+
+            <button
+              onClick={() => setSortType("popular")}
+              className={`transition ${
+                sortType === "popular"
+                  ? "text-orange-600 font-bold"
+                  : "text-gray-600 hover:text-orange-500"
+              }`}
+            >
+              پرفروش‌ترین
+            </button>
+
+            <button
+              onClick={() => setSortType("newest")}
+              className={`transition ${
+                sortType === "newest"
+                  ? "text-orange-600 font-bold"
+                  : "text-gray-600 hover:text-orange-500"
+              }`}
+            >
+              جدیدترین
+            </button>
           </div>
         </div>
 
@@ -134,16 +157,7 @@ export default function ProductsPage() {
             <div className="w-16 h-16 border-4 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
-          <div
-            className="
-              grid grid-cols-1
-              sm:grid-cols-2
-              md:grid-cols-3
-              lg:grid-cols-4
-              xl:grid-cols-5
-              gap-8
-            "
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {filteredProducts.length ? (
               filteredProducts.map((product) => {
                 const id = product.slug || product._id || product.id;
@@ -171,7 +185,6 @@ export default function ProductsPage() {
                         {product.title}
                       </h2>
 
-                      {/* توضیح کوتاه محصول */}
                       {product.description && (
                         <p className="mt-1 text-gray-500 text-sm text-center line-clamp-2">
                           {product.description}
@@ -179,16 +192,17 @@ export default function ProductsPage() {
                       )}
                     </Link>
 
-                    <p className="text-orange-600 font-bold mt-3">
-                      {product.price.toLocaleString()} تومان
-                    </p>
+                    <div className="mt-3 flex justify-between items-center">
+                      <p className="text-orange-600 font-bold">
+                        {product.price.toLocaleString()} تومان
+                      </p>
 
-                    {/* <button
-    onClick={() => addToCart(product)}
-    className="mt-4 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-xl transition"
-  >
-    افزودن به سبد خرید
-  </button> */}
+                      {/* {product.reviews && (
+                        <span className="text-xs text-gray-500">
+                          {product.reviews} فروش
+                        </span>
+                      )} */}
+                    </div>
                   </div>
                 );
               })
