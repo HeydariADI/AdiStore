@@ -132,7 +132,7 @@ export default function Header() {
             بلاگ
           </Link>
 
-          <Link href="/account" className="flex flex-col items-center">
+          <Link href="/login" className="flex flex-col items-center">
             <UserIcon className="w-6 h-6" />
             ورود
           </Link>
