@@ -9,7 +9,7 @@ export default function BestSellersPage() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     fetch(`${baseUrl}/api/products?best=true&all=true`) // می‌تونیم all=true برای نمایش همه اضافه کنیم
       .then((res) => res.json())
       .then((data) => {
