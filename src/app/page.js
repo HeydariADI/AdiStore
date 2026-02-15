@@ -16,7 +16,7 @@ export default function Home() {
         <Category />
       </section>
 
-      <section id="bestseller">
+      <section id="bestseller mt-20">
         <BestSellersContainer />
       </section>
 

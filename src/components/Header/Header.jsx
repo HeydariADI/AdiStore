@@ -40,7 +40,21 @@ export default function Header() {
         {/* ردیف بالا */}
         <div className="bg-gray-50">
           <div className="container mx-auto flex items-center justify-between h-24 px-6">
-            {/* منو سمت چپ */}
+            {/* لوگو   */}
+            <Link href="/">
+              <img
+                src="/images/logo/logo4.png"
+                alt="Adistor"
+                className="w-16 md:w-24  h-auto"
+              />
+            </Link>
+
+            {/* Search Box مرکزی */}
+            <div className="flex-1 px-4 py-3 max-w-full">
+              <SearchBox />
+            </div>
+
+            {/* منو   */}
             <div className="flex items-center gap-8 text-sm">
               <Link
                 href="/orders"
@@ -79,20 +93,6 @@ export default function Header() {
                 ورود
               </Link>
             </div>
-
-            {/* Search Box مرکزی */}
-            <div className="flex-1 px-6 py-4 max-w-2xl">
-              <SearchBox />
-            </div>
-
-            {/* لوگو سمت راست */}
-            <Link href="/">
-              <img
-                src="/images/logo/logo4.png"
-                alt="Adistor"
-                className="w-28"
-              />
-            </Link>
           </div>
         </div>
 

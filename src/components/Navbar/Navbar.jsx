@@ -8,7 +8,7 @@ function Navbar() {
 
   return (
     <nav className="relative">
-      <div className="hidden md:flex justify-center md:justify-start items-center gap-6 text-lg font-medium relative ">
+      <div className="hidden md:flex justify-center md:justify-start items-center gap-6 text-lg font-medium relative p-2">
         <Link href="/">صفحه اصلی</Link>
         <Link href="/products">محصولات</Link>
         <Link href="/about">درباره ما</Link>
