@@ -29,9 +29,9 @@ export default function ProductsClient() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:3000/api/products", {
-          cache: "no-store",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`,
+        );
 
         const data = await res.json();
         setProducts(Array.isArray(data) ? data : data.products || []);
@@ -74,10 +74,10 @@ export default function ProductsClient() {
     router.push(cat === "all" ? "/products" : `/products?category=${cat}`);
   };
 
-  // Scroll to top on change
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, [sortType, activeCategory]);
+  // // Scroll to top on change
+  // useEffect(() => {
+  //   window.scrollTo({ top: 0 });
+  // }, [sortType, activeCategory]);
 
   return (
     <section className="w-full min-h-screen bg-gray-50">
