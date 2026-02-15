@@ -29,7 +29,8 @@ export default function ProductsPage() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const res = await fetch("/api/products");
+        const res = await fetch("/api/products", { cache: "no-store" });
+
         const data = await res.json();
         setProducts(Array.isArray(data) ? data : data.products || []);
       } catch {
@@ -194,7 +195,7 @@ export default function ProductsPage() {
 
                     <div className="mt-3 flex justify-between items-center">
                       <p className="text-orange-600 font-bold">
-                        {product.price.toLocaleString()} تومان
+                        {Number(product.price || 0).toLocaleString()} تومان
                       </p>
 
                       {/* {product.reviews && (
@@ -217,3 +218,20 @@ export default function ProductsPage() {
     </section>
   );
 }
+
+// import { Suspense } from "react";
+// import ProductsClient from "./ProductsClient";
+
+// export default function ProductsPage() {
+//   return (
+//     <Suspense
+//       fallback={
+//         <div className="flex justify-center items-center min-h-screen">
+//           <div className="w-16 h-16 border-4 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+//         </div>
+//       }
+//     >
+//       <ProductsClient />
+//     </Suspense>
+//   );
+// }
