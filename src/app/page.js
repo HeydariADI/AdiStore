@@ -2,7 +2,7 @@ import HeroSection from "../components/HeroSection/HeroSection";
 import Category from "../components/Category/Category";
 import SpecialOffer from "../components/SpecialOffer/SpecialOffer";
 import StoreBenefits from "../components/StoreBenefits/StoreBenefits";
-import BestSellersContainer from "../components/Bestseller/BestSellersContainer";
+import BestSellersContainer from "../components/BestSeller/BestSellersContainer";
 import Readables from "../components/Readables/Readables.jsx";
 
 export default function Home() {
