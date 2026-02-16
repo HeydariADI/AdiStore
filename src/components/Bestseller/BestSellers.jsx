@@ -1,5 +1,5 @@
-// src/components/Bestseller/BestSellers.jsx
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "../../context/CartContext";
@@ -19,35 +19,33 @@ export default function BestSellers({ products }) {
         پرفروش‌ترین‌ها
       </h2>
 
-      {/* موبایل: اسکرول افقی با بک‌گراند نارنجی */}
-      <div className="md:hidden bg-orange-500 rounded-xl p-4">
-        <div className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide">
+      {/* موبایل: اسکرول افقی با کادر نارنجی */}
+      <div className="md:hidden relative bg-orange-500 py-6 rounded-xl px-4">
+        <div className="flex gap-4 overflow-x-auto scroll-smooth scrollbar-hide py-2">
           {products.map((product) => (
             <div
               key={product._id}
-              className="min-w-[160px] snap-start bg-white rounded-lg shadow-md p-3 flex flex-col gap-2 relative"
+              className="min-w-[180px] bg-white rounded-lg shadow-md p-3 flex flex-col gap-2 flex-shrink-0"
             >
-              <Link href={`/products/${product._id}`}>
-                <div className="relative w-full h-36 bg-gray-100 rounded-md overflow-hidden">
-                  <Image
-                    src={product.image || "/placeholder.png"}
-                    alt={product.name || "محصول"}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-sm font-semibold text-gray-800 mt-2 line-clamp-2">
-                  {product.name}
-                </h3>
-              </Link>
-              <p className="text-orange-600 font-bold text-sm mt-1 text-center">
+              <div className="relative w-full h-36 bg-gray-100 rounded-md overflow-hidden">
+                <Image
+                  src={product.image || "/placeholder.png"}
+                  alt={product.name || "محصول"}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <h3 className="text-sm font-semibold text-gray-800 line-clamp-2">
+                {product.name}
+              </h3>
+              <p className="text-orange-600 font-bold text-sm">
                 {product.price
                   ? Number(product.price).toLocaleString("fa-IR") + " تومان"
                   : "قیمت موجود نیست"}
               </p>
               <button
                 onClick={() => addToCart(product)}
-                className="bg-orange-600 hover:bg-orange-700 text-white text-xs w-full py-1.5 rounded-md mt-2 shadow transition"
+                className="bg-orange-500 hover:bg-orange-600 text-white px-2 py-1 rounded-md text-xs mt-1"
               >
                 افزودن به سبد خرید
               </button>
@@ -80,15 +78,6 @@ export default function BestSellers({ products }) {
                 ? Number(product.price).toLocaleString("fa-IR") + " تومان"
                 : "قیمت موجود نیست"}
             </p>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addToCart(product);
-              }}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow hover:shadow-md mt-2"
-            >
-              افزودن به سبد خرید
-            </button>
           </Link>
         ))}
       </div>

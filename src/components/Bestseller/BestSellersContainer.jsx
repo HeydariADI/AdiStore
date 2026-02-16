@@ -1,15 +1,15 @@
-// src/components/Bestseller/BestSellersContainer.jsx
 "use client";
+
 import { useEffect, useState } from "react";
-import BestSellers from "./BestSellers";
+import BestSellers from "../Bestseller/BestSellers";
 
 export default function BestSellersContainer() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
-    fetch(`${baseUrl}/api/products?best=true`)
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    fetch(`${baseUrl}/api/products?best=true&all=true`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
