@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function Category() {
+export default function CategoryDesktop() {
   const categories = [
     { name: "لپ‌تاپ", category: "laptop", image: "/images/laptop/2.jpg" },
     { name: "موبایل", category: "mobile", image: "/images/mobile/mobile2.jpg" },
@@ -49,5 +49,3 @@ function Category() {
     </section>
   );
 }
-
-export default Category;
