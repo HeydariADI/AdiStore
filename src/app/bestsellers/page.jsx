@@ -9,8 +9,13 @@ export default function BestSellersPage() {
   const { addToCart } = useCart();
 
   useEffect(() => {
+<<<<<<< HEAD
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
     fetch(`${baseUrl}/api/products?best=true&all=true`)
+=======
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    fetch(`${baseUrl}/api/products?best=true&all=true`) // می‌تونیم all=true برای نمایش همه اضافه کنیم
+>>>>>>> ec3f6d361b3b44bc21819a8e98a2cf3fbfed3e68
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
