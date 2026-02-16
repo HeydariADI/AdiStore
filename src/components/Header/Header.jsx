@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "../Navbar/Navbar";
 import SearchBox from "../SearchBox/SearchBox";
 import CartPreviewModal from "../CartPreviewModal/CartPreviewModal";
+import CategoryMobileModal from "../Category/CategoryMobileModal";
 import { useCart } from "@/context/CartContext";
 
 import {
@@ -19,6 +20,7 @@ import {
 export default function Header() {
   const { cart } = useCart();
   const [showCart, setShowCart] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
 
   const cartItemCount = cart.reduce(
     (sum, item) => sum + (item.quantity || 1),
@@ -29,32 +31,30 @@ export default function Header() {
     <>
       {/* موبایل بالا */}
       <div className="md:hidden flex justify-between items-center sticky top-0 z-50 bg-white shadow p-3">
-        <SearchBox />
+        <div className="flex-1 mr-2">
+          <SearchBox />
+        </div>
         <Link href="/">
-          <img src="/images/logo/logo4.png" alt="logo" className="w-20" />
+          <img src="/images/logo/logo4.png" alt="logo" className="w-16" />
         </Link>
       </div>
 
       {/* دسکتاپ */}
       <header className="hidden md:block w-full bg-white shadow font-vazirmatn">
-        {/* ردیف بالا */}
         <div className="bg-gray-50">
           <div className="container mx-auto flex items-center justify-between h-24 px-6">
-            {/* لوگو   */}
             <Link href="/">
               <img
                 src="/images/logo/logo4.png"
                 alt="Adistor"
-                className="w-16 md:w-24  h-auto"
+                className="w-24 h-auto"
               />
             </Link>
 
-            {/* Search Box مرکزی */}
             <div className="flex-1 px-4 py-3 max-w-full">
               <SearchBox />
             </div>
 
-            {/* منو   */}
             <div className="flex items-center gap-8 text-sm">
               <Link
                 href="/orders"
@@ -64,7 +64,6 @@ export default function Header() {
                 سفارش‌ها
               </Link>
 
-              {/* سبد خرید + مودال */}
               <div
                 className="relative"
                 onMouseEnter={() => setShowCart(true)}
@@ -96,7 +95,6 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Navbar پایین */}
         <div className="bg-gray-100">
           <div className="container mx-auto p-3">
             <Navbar />
@@ -112,10 +110,14 @@ export default function Header() {
             خانه
           </Link>
 
-          <Link href="/categories" className="flex flex-col items-center">
+          {/* دسته‌ها = مودال */}
+          <button
+            onClick={() => setShowCategories(true)}
+            className="flex flex-col items-center"
+          >
             <Squares2X2Icon className="w-6 h-6" />
             دسته‌ها
-          </Link>
+          </button>
 
           <Link href="/cart" className="flex flex-col items-center relative">
             <ShoppingCartIcon className="w-6 h-6" />
@@ -138,6 +140,11 @@ export default function Header() {
           </Link>
         </div>
       </div>
+
+      {/* مودال دسته‌بندی موبایل */}
+      {showCategories && (
+        <CategoryMobileModal onClose={() => setShowCategories(false)} />
+      )}
     </>
   );
 }

@@ -14,18 +14,24 @@ export default function CategoryMobile() {
 
   return (
     <section className="px-4 mt-4">
-      <div className="flex gap-4 overflow-x-auto no-scrollbar">
+      <h2 className="text-sm font-semibold mb-3">دسته‌بندی‌ها</h2>
+
+      <div className="grid grid-cols-4 gap-4">
         {categories.map((cat) => (
           <Link
             key={cat.category}
             href={`/products/category/${cat.category}`}
-            className="min-w-[80px] flex flex-col items-center"
+            className="flex flex-col items-center active:scale-95 transition"
           >
-            <img
-              src={cat.image}
-              className="w-16 h-16 rounded-full object-cover"
-            />
-            <p className="text-sm mt-2">{cat.name}</p>
+            <div className="w-14 h-14 rounded-full overflow-hidden border">
+              <img
+                src={cat.image}
+                alt={cat.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <p className="text-xs mt-2 text-center">{cat.name}</p>
           </Link>
         ))}
       </div>
