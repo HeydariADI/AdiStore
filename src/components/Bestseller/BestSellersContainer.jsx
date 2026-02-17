@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import BestSellers from "../Bestseller/BestSellers";
+import BestSellers from "./BestSellers";
 
 export default function BestSellersContainer() {
   const [products, setProducts] = useState([]);
