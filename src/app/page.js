@@ -1,9 +1,8 @@
 import HeroSection from "../components/HeroSection/HeroSection";
 import Category from "../components/Category/Category";
 import SpecialOffer from "../components/SpecialOffer/SpecialOffer";
-
 import Readables from "../components/Readables/Readables";
-import BestSellersContainer from "../components/BestSeller/BestSellersContainer";
+import BestSellersContainer from "../components/BestSeller/BestSellersContainer"; // مطمئن شو مسیر و حروف دقیق هست
 import StoreBenefits from "../components/StoreBenefits/StoreBenefits";
 
 export default function Home() {
@@ -13,11 +12,11 @@ export default function Home() {
         <HeroSection />
       </section>
 
-      <section id="categories" className="">
+      <section id="categories">
         <Category />
       </section>
 
-      <section id="bestseller mt-20">
+      <section id="bestseller" className="mt-20">
         <BestSellersContainer />
       </section>
 
