@@ -2,8 +2,9 @@ import HeroSection from "../components/HeroSection/HeroSection";
 import Category from "../components/Category/Category";
 import SpecialOffer from "../components/SpecialOffer/SpecialOffer";
 import Readables from "../components/Readables/Readables";
-import BestSellersContainer from "../components/BestSeller/BestSellersContainer"; // مطمئن شو مسیر و حروف دقیق هست
+
 import StoreBenefits from "../components/StoreBenefits/StoreBenefits";
+import BestSellersContainer from "../components/BestSellersContainer/BestSellersContainer";
 
 export default function Home() {
   return (
