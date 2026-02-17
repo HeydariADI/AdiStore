@@ -76,6 +76,8 @@ const products = [
     description: "تبدیل‌پذیر 2-in-1، سبک و باریک",
     category: "laptop",
     image: "/images/laptop/laptop3.jpg",
+    specialOffer: true,
+    discount: "20%",
   },
   {
     id: 4,
@@ -159,6 +161,8 @@ const products = [
     description: "پردازنده Apple M1 Pro، مناسب طراحان و برنامه‌نویسان",
     category: "laptop",
     image: "/images/laptop/laptop12.jpg",
+    specialOffer: true,
+    discount: "40%",
   },
   {
     id: 13,
@@ -238,6 +242,8 @@ const products = [
     description: "صفحه نمایش OLED و پردازنده A15 Bionic",
     category: "mobile",
     image: "/images/mobile/mobile5.jpg",
+    specialOffer: true,
+    discount: "34%",
   },
   {
     id: 21,
@@ -325,6 +331,8 @@ const products = [
     description: "هدفون بی‌سیم با باس قوی",
     category: "headphone",
     image: "/images/headphone/headphone4.jpg",
+    specialOffer: true,
+    discount: "25%",
   },
   {
     id: 30,

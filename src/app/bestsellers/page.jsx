@@ -9,8 +9,7 @@ export default function BestSellersPage() {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    fetch(`${baseUrl}/api/products?best=true&all=true`) // می‌تونیم all=true برای نمایش همه اضافه کنیم
+    fetch("/api/products?best=true&all=true")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -25,27 +24,27 @@ export default function BestSellersPage() {
 
   return (
     <div className="container mx-auto px-4 py-10 font-vazirmatn">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 text-center cursor-pointer">
+      {/* <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 text-center cursor-pointer">
         پرفروش‌ترین‌ها
-      </h1>
+      </h1> */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <div
             key={product._id || Math.random()}
-            className="bg-white rounded-2xl shadow-md p-4 flex flex-col"
+            className="bg-white rounded-xl shadow-md p-4 flex flex-col"
           >
             <div className="relative w-full h-48 md:h-56 bg-gray-100 rounded-2xl overflow-hidden">
               <Image
                 src={product.image || "/placeholder.png"}
-                alt={product.name || "محصول"}
+                alt={product.title || "محصول"}
                 fill
                 className="object-cover"
               />
             </div>
 
             <h3 className="text-base font-semibold text-gray-800 mt-3 line-clamp-1">
-              {product.name || "محصول بدون نام"}
+              {product.title || "محصول بدون نام"}
             </h3>
             <p className="text-sm text-gray-500 mt-1 line-clamp-2">
               {product.description}

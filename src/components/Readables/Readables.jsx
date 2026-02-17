@@ -28,34 +28,57 @@ export const articles = [
 
 export default function Readables() {
   return (
-    <section className="py-16 bg-gray-50 font-vazirmatn mt-20">
+    <section className="py-16 bg-gray-50 font-vazirmatn ">
       <div className="container mx-auto px-4 md:px-6">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 text-center mb-10">
+        <h2 className="text-xl md:text-3xl font-extrabold text-gray-800 text-center mb-10">
           خواندنی‌ها
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* موبایل: اسکرول افقی */}
+        <div className="md:hidden flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-4">
           {articles.map((article) => (
             <Link
               key={article.slug}
               href={`/readables/${article.slug}`}
-              className="group block"
+              className="min-w-[220px] relative flex-shrink-0 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="relative h-56 md:h-64 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
-                {/* تصویر پس‌زمینه */}
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${article.image})` }}
-                ></div>
-
-                {/* overlay برای تار کردن پس‌زمینه */}
-                <div className="absolute inset-0 bg-black/40 flex items-end p-4">
-                  <h3 className="text-white text-lg md:text-xl font-bold line-clamp-2">
+              <div className="relative w-full h-56">
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  fill
+                  className="object-cover rounded-2xl"
+                />
+                <div className="absolute inset-0 bg-black/30 flex items-end p-3">
+                  <h3 className="text-white text-base font-bold line-clamp-2">
                     {article.title}
                   </h3>
                 </div>
+              </div>
+            </Link>
+          ))}
+        </div>
 
-                {/* افکت hover روی border */}
+        {/* دسکتاپ: Grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {articles.map((article) => (
+            <Link
+              key={article.slug}
+              href={`/readables/${article.slug}`}
+              className="group block rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 relative"
+            >
+              <div className="relative h-64">
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  fill
+                  className="object-cover rounded-2xl group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-black/30 flex items-end p-4">
+                  <h3 className="text-white text-lg font-bold line-clamp-2">
+                    {article.title}
+                  </h3>
+                </div>
                 <div className="absolute inset-0 border-4 border-transparent group-hover:border-orange-400 rounded-2xl transition-all duration-500"></div>
               </div>
             </Link>

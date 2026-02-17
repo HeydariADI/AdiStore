@@ -8,8 +8,7 @@ export default function BestSellersContainer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    fetch(`${baseUrl}/api/products?best=true&all=true`)
+    fetch("/api/products?best=true&all=true")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
