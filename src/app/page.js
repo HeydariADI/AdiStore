@@ -1,10 +1,10 @@
 import HeroSection from "../components/HeroSection/HeroSection";
 import Category from "../components/Category/Category";
 import SpecialOffer from "../components/SpecialOffer/SpecialOffer";
-import StoreBenefits from "../components/StoreBenefits/StoreBenefits";
 
-import Readables from "../components/Readables/Readables.jsx";
-import BestSellersContainer from "../components/BestSeller/BestSellersContainer";
+import Readables from "@/components/Readables/Readables";
+import BestSellersContainer from "@/components/BestSeller/BestSellersContainer";
+import StoreBenefits from "@/components/StoreBenefits/StoreBenefits";
 
 export default function Home() {
   return (
