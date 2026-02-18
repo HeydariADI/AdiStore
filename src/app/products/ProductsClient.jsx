@@ -29,9 +29,8 @@ export default function ProductsClient() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`,
-        );
+        const base = process.env.NEXT_PUBLIC_BASE_URL || "";
+        const res = await fetch(`${base}/api/products`);
 
         const data = await res.json();
         setProducts(Array.isArray(data) ? data : data.products || []);
@@ -134,7 +133,7 @@ export default function ProductsClient() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {filteredProducts.length ? (
               filteredProducts.map((product) => {
-                const id = product.slug || product._id || product.id;
+                const id = product.slug || (product._id && String(product._id)) || product.id;
                 return (
                   <div
                     key={id}

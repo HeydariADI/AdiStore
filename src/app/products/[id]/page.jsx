@@ -51,10 +51,32 @@ export default function ProductDetail({ params }) {
 
   return (
     <div className="w-full bg-gray-50">
-      <div className="mx-auto px-4 py-8 font-vazirmatn max-w-full 2xl:max-w-[1700px]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* تصویر */}
-          <div className="lg:col-span-4">
+      <div className="mx-auto px-4 py-6 font-vazirmatn max-w-full 2xl:max-w-[1700px]">
+        {/* موبایل: کارت بالا با تصویر + نام + قیمت + دکمه */}
+        <div className="lg:hidden bg-white rounded-xl shadow p-4 flex flex-col gap-4">
+          <img
+            src={product.image}
+            alt={product.title}
+            className="w-full h-64 object-contain rounded-lg"
+          />
+          <div className="flex flex-col gap-2">
+            <h1 className="text-lg font-bold">{product.title}</h1>
+            <p className="text-xl font-bold text-orange-600">
+              {enTofa(product.price)} تومان
+            </p>
+            <button
+              onClick={() => addToCart(product)}
+              className="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl"
+            >
+              افزودن به سبد خرید
+            </button>
+          </div>
+        </div>
+
+        {/* دسکتاپ و موبایل همزمان: grid اصلی */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+          {/* تصویر دسکتاپ */}
+          <div className="hidden lg:block lg:col-span-4">
             <div className="bg-white rounded-xl shadow p-6 flex justify-center items-center">
               <img
                 src={product.image}
@@ -66,19 +88,27 @@ export default function ProductDetail({ params }) {
 
           {/* اطلاعات و ویژگی‌ها */}
           <div className="lg:col-span-5 flex flex-col gap-4">
-            <h1 className="text-xl lg:text-2xl font-bold leading-8">
-              {product.title}
-            </h1>
-
-            <Link
-              href={`/products/category/${product.category}`}
-              className="text-blue-600 text-sm"
-            >
-              {product.category}
-            </Link>
-
+            {/* موبایل: ویژگی‌ها بالای fold */}
             {product.features && (
-              <div>
+              <div className="lg:hidden bg-white rounded-xl shadow p-4 mt-4">
+                <h2 className="font-bold mb-2">ویژگی‌ها</h2>
+                <div className="grid grid-cols-2 gap-2 overflow-x-auto scrollbar-hide">
+                  {Object.entries(product.features).map(([k, v]) => (
+                    <div
+                      key={k}
+                      className="bg-gray-100 p-2 rounded-lg min-w-[100px] flex-shrink-0"
+                    >
+                      <p className="text-xs text-gray-500">{k}</p>
+                      <p className="font-bold text-sm">{v}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* دسکتاپ: ویژگی‌ها */}
+            {product.features && (
+              <div className="hidden lg:block">
                 <h2 className="font-bold mt-4 mb-3">ویژگی‌ها</h2>
                 <div className="grid grid-cols-2 gap-3">
                   {Object.entries(product.features).map(([k, v]) => (
@@ -92,38 +122,31 @@ export default function ProductDetail({ params }) {
             )}
           </div>
 
-          {/* بخش خرید */}
-          <div className="lg:col-span-3  rounded-xl shadow p-5">
-            <div className="bg-white rounded-xl shadow p-5 sticky top-24 flex flex-col gap-10">
-              {/* فروشنده */}
-              <div className="flex flex-col items-start gap-2">
-                <p className="text-xl font-semibold ">فروشنده</p>
-
-                <p className="font-bold flex items-center gap-2 mt-4">
+          {/* بخش خرید دسکتاپ */}
+          <div className="hidden lg:block lg:col-span-3">
+            <div className="bg-white rounded-xl shadow p-5 flex flex-col gap-10 sticky top-24">
+              <div>
+                <p className="text-xl font-semibold">فروشنده</p>
+                <p className="font-bold flex items-center gap-2 mt-2">
                   <BuildingStorefrontIcon className="w-6 h-6 text-gray-500" />
                   {product.seller || "فروشگاه ادی استور"}
                 </p>
               </div>
 
-              {/* قیمت */}
-              <div className="border-t pt-4">
-                <p className="text-2xl font-bold text-orange-600">
-                  {enTofa(product.price)} تومان
-                </p>
-              </div>
+              <p className="text-2xl font-bold text-orange-600">
+                {enTofa(product.price)} تومان
+              </p>
 
-              {/* افزودن به سبد خرید */}
               <button
                 onClick={() => addToCart(product)}
-                className="w-full bg-orange-500 hover:bg-orange-600 transition text-white py-3 rounded-xl"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl"
               >
                 افزودن به سبد خرید
               </button>
 
-              {/* روش و هزینه ارسال */}
               <button
                 onClick={() => setModalOpen(true)}
-                className="mt-4 text-blue-600 font-semibold flex items-center gap-2 hover:underline"
+                className="text-blue-600 font-semibold flex items-center gap-2 hover:underline"
               >
                 <TruckIcon className="w-5 h-5" /> روش و هزینه ارسال
               </button>
@@ -136,7 +159,6 @@ export default function ProductDetail({ params }) {
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-5">
           <div className="bg-white rounded-xl shadow-lg w-11/12 max-w-md p-10 relative animate-fadeIn">
-            {/* دکمه بستن */}
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"

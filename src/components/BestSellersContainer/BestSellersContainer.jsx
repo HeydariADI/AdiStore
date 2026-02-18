@@ -44,30 +44,34 @@ export default function BestSellersContainer() {
       <p className="text-center text-gray-600 mt-10">محصول پرفروشی یافت نشد.</p>
     );
 
-  const productCard = (product) => (
-    <div
-      key={product._id}
-      className="min-w-[140px] sm:min-w-[180px] md:min-w-[220px] bg-white rounded-md p-3 flex flex-col shrink-0"
-    >
-      <div className="relative w-full h-36 sm:h-40 md:h-44 mb-2">
-        <Image
-          src={product.image}
-          alt={product.name || product.title || "product"}
-          fill
-          className="object-contain"
-        />
-      </div>
-      <p className="text-xs text-gray-700 line-clamp-2">
-        {product.name || product.title}
-      </p>
-      <p className="text-red-500 font-bold text-sm mt-auto">
-        {Number(product.price).toLocaleString("fa-IR")} تومان
-      </p>
-    </div>
-  );
+  const productCard = (product) => {
+    const pid = product.slug || (product._id && String(product._id)) || product.id;
+    return (
+      <Link
+        key={product._id}
+        href={pid ? `/products/${pid}` : "#"}
+        className="min-w-[140px] sm:min-w-[180px] md:min-w-[220px] bg-white rounded-md p-3 flex flex-col shrink-0 hover:shadow-md transition"
+      >
+        <div className="relative w-full h-36 sm:h-40 md:h-44 mb-2">
+          <Image
+            src={product.image}
+            alt={product.name || product.title || "product"}
+            fill
+            className="object-contain"
+          />
+        </div>
+        <p className="text-xs text-gray-700 line-clamp-2">
+          {product.name || product.title}
+        </p>
+        <p className="text-red-500 font-bold text-sm mt-auto">
+          {Number(product.price).toLocaleString("fa-IR")} تومان
+        </p>
+      </Link>
+    );
+  };
 
   return (
-    <section className="font-vazirmatn py-10">
+    <section className="font-vazirmatn py-10 bg-gray-50 ">
       {/* موبایل */}
       <div className="flex md:hidden flex-col gap-3 px-2">
         <div className="flex justify-between items-center">
