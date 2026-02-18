@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import {
@@ -16,7 +17,8 @@ function enTofa(num) {
 }
 
 export default function ProductDetail({ params }) {
-  const { id } = use(params);
+  const { id } = useParams(); // ✅ همیشه درست
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
