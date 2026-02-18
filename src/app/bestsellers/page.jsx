@@ -24,17 +24,15 @@ export default function BestSellersPage() {
 
   return (
     <div className="container mx-auto px-4 py-10 font-vazirmatn">
-      {/* <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-8 text-center cursor-pointer">
-        پرفروش‌ترین‌ها
-      </h1> */}
-
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <div
             key={product._id || Math.random()}
-            className="bg-white rounded-xl shadow-md p-4 flex flex-col"
+            className="bg-white rounded-xl shadow-md overflow-hidden 
+                       flex flex-col lg:flex-col sm:flex-row gap-3 p-4"
           >
-            <div className="relative w-full h-48 md:h-56 bg-gray-100 rounded-2xl overflow-hidden">
+            {/* تصویر */}
+            <div className="relative w-24 h-24 sm:w-24 sm:h-24 lg:w-full lg:h-48 flex-shrink-0 bg-gray-100 rounded-2xl overflow-hidden">
               <Image
                 src={product.image || "/placeholder.png"}
                 alt={product.title || "محصول"}
@@ -43,25 +41,28 @@ export default function BestSellersPage() {
               />
             </div>
 
-            <h3 className="text-base font-semibold text-gray-800 mt-3 line-clamp-1">
-              {product.title || "محصول بدون نام"}
-            </h3>
-            <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-              {product.description}
-            </p>
-
-            <div className="flex justify-between items-center mt-3">
-              <p className="text-orange-600 font-bold text-sm">
-                {product.price || product.price === 0
-                  ? Number(product.price).toLocaleString("fa-IR") + " تومان"
-                  : "قیمت موجود نیست"}
+            {/* متن */}
+            <div className="flex flex-col justify-between flex-1 gap-1">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-800 line-clamp-2">
+                {product.title || "محصول بدون نام"}
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-500 line-clamp-2">
+                {product.description}
               </p>
-              <button
-                onClick={() => addToCart(product)}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all shadow hover:shadow-md"
-              >
-                افزودن به سبد خرید
-              </button>
+
+              <div className="flex justify-between items-center mt-2">
+                <p className="text-orange-600 font-bold text-sm sm:text-base">
+                  {product.price || product.price === 0
+                    ? Number(product.price).toLocaleString("fa-IR") + " تومان"
+                    : "قیمت موجود نیست"}
+                </p>
+                <button
+                  onClick={() => addToCart(product)}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all shadow hover:shadow-md"
+                >
+                  افزودن به سبد خرید
+                </button>
+              </div>
             </div>
           </div>
         ))}
