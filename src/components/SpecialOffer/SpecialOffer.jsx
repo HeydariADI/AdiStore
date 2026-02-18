@@ -36,7 +36,7 @@ export default function WeeklySpecialOffer() {
     <section className="mt-10 py-6 font-vazirmatn">
       <div className="container mx-auto px-4">
         {/* کارت بزرگ تیتر */}
-        <div className="flex flex-col md:flex-row bg-orange-100 rounded-xl p-4 md:p-6 gap-4">
+        <div className="flex flex-col md:flex-row bg-gray-50 shadow rounded-xl p-4 md:p-6 gap-4">
           {/* تیتر */}
           <div className="flex flex-row md:flex-col items-center md:items-start gap-2 md:gap-4 w-full md:w-1/3">
             <h2 className="text-lg md:text-xl md:m-4 font-bold text-gray-800">

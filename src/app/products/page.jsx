@@ -26,6 +26,13 @@
 //     { label: "گجت‌ها", value: "game" },
 //   ];
 //   const listTopRef = useRef(null);
+//   const userChangedFilter = useRef(false);
+
+//   useEffect(() => {
+//     window.scrollTo(0, 0);
+//     const t = setTimeout(() => window.scrollTo(0, 0), 50);
+//     return () => clearTimeout(t);
+//   }, []);
 
 //   useEffect(() => {
 //     const fetchProducts = async () => {
@@ -74,12 +81,20 @@
 //     );
 
 //   const handleCategoryChange = (cat) => {
+//     userChangedFilter.current = true;
 //     setSortType("default");
 //     if (cat === "all") router.push("/products");
 //     else router.push(`/products?category=${cat}`);
 //   };
 
+//   const handleSortChange = (type) => {
+//     userChangedFilter.current = true;
+//     setSortType(type);
+//   };
+
 //   useEffect(() => {
+//     if (!userChangedFilter.current) return;
+//     userChangedFilter.current = false;
 //     listTopRef.current?.scrollIntoView({ behavior: "smooth" });
 //   }, [sortType, activeCategory]);
 
@@ -110,7 +125,7 @@
 //             <span className="text-gray-500">مرتب‌سازی:</span>
 
 //             <button
-//               onClick={() => setSortType("cheap")}
+//               onClick={() => handleSortChange("cheap")}
 //               className={`transition ${
 //                 sortType === "cheap"
 //                   ? "text-orange-600 font-bold"
@@ -121,7 +136,7 @@
 //             </button>
 
 //             <button
-//               onClick={() => setSortType("expensive")}
+//               onClick={() => handleSortChange("expensive")}
 //               className={`transition ${
 //                 sortType === "expensive"
 //                   ? "text-orange-600 font-bold"
@@ -132,7 +147,7 @@
 //             </button>
 
 //             <button
-//               onClick={() => setSortType("popular")}
+//               onClick={() => handleSortChange("popular")}
 //               className={`transition ${
 //                 sortType === "popular"
 //                   ? "text-orange-600 font-bold"
@@ -143,7 +158,7 @@
 //             </button>
 
 //             <button
-//               onClick={() => setSortType("newest")}
+//               onClick={() => handleSortChange("newest")}
 //               className={`transition ${
 //                 sortType === "newest"
 //                   ? "text-orange-600 font-bold"
