@@ -44,8 +44,46 @@ export default function BestSellersContainer() {
       <p className="text-center text-gray-600 mt-10">محصول پرفروشی یافت نشد.</p>
     );
 
+  const productCard = (product) => (
+    <div
+      key={product._id}
+      className="min-w-[140px] sm:min-w-[180px] md:min-w-[220px] bg-white rounded-md p-3 flex flex-col shrink-0"
+    >
+      <div className="relative w-full h-36 sm:h-40 md:h-44 mb-2">
+        <Image
+          src={product.image}
+          alt={product.name || product.title || "product"}
+          fill
+          className="object-contain"
+        />
+      </div>
+      <p className="text-xs text-gray-700 line-clamp-2">
+        {product.name || product.title}
+      </p>
+      <p className="text-red-500 font-bold text-sm mt-auto">
+        {Number(product.price).toLocaleString("fa-IR")} تومان
+      </p>
+    </div>
+  );
+
   return (
     <section className="font-vazirmatn py-10">
+      {/* موبایل */}
+      <div className="flex md:hidden flex-col gap-3 px-2">
+        <div className="flex justify-between items-center">
+          <h2 className="font-bold text-lg">پرفروش‌ترین‌ها</h2>
+          <Link href="/bestsellers" className="text-sm text-orange-500">
+            مشاهده همه
+          </Link>
+        </div>
+        <div className="overflow-x-auto scrollbar-hide -mx-2 px-2">
+          <div className="flex gap-3 w-max py-2">
+            {products.map(productCard)}
+          </div>
+        </div>
+      </div>
+
+      {/* دسکتاپ */}
       <div className="hidden md:flex bg-orange-500 rounded-xl overflow-hidden">
         <div className="min-w-[220px] flex flex-col justify-center items-center text-white p-4 border-l border-white/30">
           <h2 className="font-bold text-lg mb-2">پرفروش‌ترین‌ها</h2>
@@ -62,27 +100,7 @@ export default function BestSellersContainer() {
           onMouseMove={handleMouseMove}
         >
           <div className="flex gap-3 p-4 w-max">
-            {products.map((product) => (
-              <div
-                key={product._id}
-                className="min-w-[220px] bg-white rounded-md p-3 flex flex-col"
-              >
-                <div className="relative w-full h-44 mb-2">
-                  <Image
-                    src={product.image}
-                    alt={product.name || product.title || "product"}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                <p className="text-xs text-gray-700 line-clamp-2">
-                  {product.name || product.title}
-                </p>
-                <p className="text-red-500 font-bold text-sm mt-auto">
-                  {Number(product.price).toLocaleString("fa-IR")} تومان
-                </p>
-              </div>
-            ))}
+            {products.map(productCard)}
           </div>
         </div>
       </div>
