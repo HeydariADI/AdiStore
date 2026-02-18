@@ -16,7 +16,7 @@ function enTofa(num) {
   return num.toString().replace(/\d/g, (d) => farsiDigits[d]);
 }
 
-export default function ProductDetail({ params }) {
+export default function ProductDetail() {
   const { id } = useParams(); // ✅ همیشه درست
 
   const [product, setProduct] = useState(null);
