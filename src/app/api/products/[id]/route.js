@@ -6,28 +6,24 @@ export async function GET(request, { params }) {
   try {
     await connectToDatabase();
 
-    const { id } = params;
+    const id = params?.id;
 
     if (!id) {
       return NextResponse.json(
-        { message: "Invalid ID" },
+        { message: "شناسه نامعتبر است" },
         { status: 400 }
       );
     }
 
-    let product = null;
+    let product = await Product.findOne({ slug: id }).lean();
 
-    // slug search
-    product = await Product.findOne({ slug: id }).lean();
-
-    // fallback _id
     if (!product && id.length === 24) {
       product = await Product.findById(id).lean();
     }
 
     if (!product) {
       return NextResponse.json(
-        { message: "Product not found" },
+        { message: "محصول یافت نشد" },
         { status: 404 }
       );
     }
@@ -36,7 +32,7 @@ export async function GET(request, { params }) {
 
     return NextResponse.json(product);
   } catch (error) {
-    console.error(error);
+    console.error("❌ PRODUCT API ERROR:", error);
 
     return NextResponse.json(
       { error: "Server error" },
