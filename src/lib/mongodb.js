@@ -7,7 +7,7 @@ if (!MONGODB_URI) {
   throw new Error("❌ MONGODB_URI is not defined");
 }
 
-/* ---------------- Mongoose Connection ---------------- */
+/* ---------------- Mongoose ---------------- */
 
 let cached = global.mongoose;
 
@@ -20,7 +20,7 @@ export async function connectToDatabase() {
 
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI).then((mongoose) => {
-      console.log("✅ MongoDB connected (Mongoose)");
+      console.log("✅ MongoDB connected");
       return mongoose;
     });
   }
@@ -29,7 +29,7 @@ export async function connectToDatabase() {
   return cached.conn;
 }
 
-/* ---------------- Native Mongo Client (for NextAuth) ---------------- */
+/* ---------------- NextAuth Adapter ---------------- */
 
 let client;
 let clientPromise;
