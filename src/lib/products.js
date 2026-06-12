@@ -1,4 +1,4 @@
-import connectToDatabase from "./mongodb";
+import { connectToDatabase } from "./mongodb";
 import Product from "../../models/Products";
 
 export async function getAllProducts() {
