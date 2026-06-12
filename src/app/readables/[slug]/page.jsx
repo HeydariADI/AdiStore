@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import connectToDatabase from "@lib/mongodb";
+import { connectToDatabase } from "@lib/mongodb";
 import Blog from "@models/Blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 // Ensure this route runs in the Node.js runtime so server-side libraries
 // like mongoose can be used safely.
 export const runtime = "nodejs";
-import connectToDatabase from "@lib/mongodb";
+import { connectToDatabase } from "@lib/mongodb";
 import Product from "@models/Products";
 
 export async function GET(request) {

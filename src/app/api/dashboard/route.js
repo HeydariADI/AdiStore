@@ -1,4 +1,4 @@
-import connectToDatabase from "@lib/mongodb";
+import { connectToDatabase } from "@lib/mongodb";
 // Use Node.js runtime for mongoose usage
 export const runtime = "nodejs";
 import User from "@models/User";

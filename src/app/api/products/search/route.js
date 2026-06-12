@@ -1,6 +1,6 @@
 // src/app/api/products/search/route.js
 import { NextResponse } from "next/server";
-import connectToDatabase from "@lib/mongodb";
+import { connectToDatabase } from "@lib/mongodb";
 import Product from "@models/Products";
 
 export const runtime = "nodejs";
