@@ -7,6 +7,7 @@ import SearchBox from "../SearchBox/SearchBox";
 import CartPreviewModal from "../CartPreviewModal/CartPreviewModal";
 import CategoryMobileModal from "../Category/CategoryMobileModal";
 import { useCart } from "@/context/CartContext";
+import { useSession } from "next-auth/react";
 
 import {
   ClipboardDocumentListIcon,
@@ -19,12 +20,14 @@ import {
 
 export default function Header() {
   const { cart } = useCart();
+  const { data: session } = useSession(); // ✅ اضافه شد
+
   const [showCart, setShowCart] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
 
   const cartItemCount = cart.reduce(
     (sum, item) => sum + (item.quantity || 1),
-    0,
+    0
   );
 
   return (
@@ -84,13 +87,33 @@ export default function Header() {
                 {showCart && <CartPreviewModal />}
               </div>
 
-              <Link
-                href="/authentication/login"
-                className="flex items-center gap-2 hover:text-orange-600 transition"
-              >
-                <UserIcon className="w-5 h-5" />
-                ورود
-              </Link>
+              {/* 🔥 فقط این بخش تغییر کرد */}
+              {session?.user ? (
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-2 hover:text-orange-600 transition"
+                >
+                  {session.user.image ? (
+                    <img
+                      src={session.user.image}
+                      className="w-6 h-6 rounded-full"
+                      alt="user"
+                    />
+                  ) : (
+                    <UserIcon className="w-5 h-5" />
+                  )}
+
+                  {session.user.name}
+                </Link>
+              ) : (
+                <Link
+                  href="/authentication/login"
+                  className="flex items-center gap-2 hover:text-orange-600 transition"
+                >
+                  <UserIcon className="w-5 h-5" />
+                  ورود
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -110,7 +133,6 @@ export default function Header() {
             خانه
           </Link>
 
-          {/* دسته‌ها = مودال */}
           <button
             onClick={() => setShowCategories(true)}
             className="flex flex-col items-center"
@@ -134,10 +156,28 @@ export default function Header() {
             بلاگ
           </Link>
 
-          <Link href="/login" className="flex flex-col items-center">
-            <UserIcon className="w-6 h-6" />
-            ورود
-          </Link>
+          {/* 🔥 موبایل هم اصلاح شد */}
+          {session?.user ? (
+            <Link href="/dashboard" className="flex flex-col items-center">
+              {session.user.image ? (
+                <img
+                  src={session.user.image}
+                  className="w-6 h-6 rounded-full"
+                  alt="user"
+                />
+              ) : (
+                <UserIcon className="w-6 h-6" />
+              )}
+              <span className="text-[10px] mt-1">
+                {session.user.name?.split(" ")[0]}
+              </span>
+            </Link>
+          ) : (
+            <Link href="/authentication/login" className="flex flex-col items-center">
+              <UserIcon className="w-6 h-6" />
+              ورود
+            </Link>
+          )}
         </div>
       </div>
 
