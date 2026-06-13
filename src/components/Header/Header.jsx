@@ -20,7 +20,7 @@ import {
 
 export default function Header() {
   const { cart } = useCart();
-  const { data: session } = useSession(); // ✅ اضافه شد
+  const { data: session } = useSession();
 
   const [showCart, setShowCart] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
@@ -32,13 +32,23 @@ export default function Header() {
 
   return (
     <>
-      {/* موبایل بالا */}
-      <div className="md:hidden flex justify-between items-center sticky top-0 z-50 bg-white shadow p-3">
-        <div className="flex-1 mr-2">
-          <SearchBox />
+      {/* موبایل بالا - ارتقای UX سرچ */}
+      <div className="md:hidden sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm px-3 py-2 flex items-center gap-2">
+        
+        {/* سرچ کشیده‌تر و طبیعی‌تر */}
+        <div className="flex-1">
+          <div className="w-full rounded-full bg-gray-100 focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-400 transition shadow-sm">
+            <SearchBox />
+          </div>
         </div>
-        <Link href="/">
-          <img src="/images/logo/logo4.png" alt="logo" className="w-16" />
+
+        {/* لوگو */}
+        <Link href="/" className="shrink-0">
+          <img
+            src="/images/logo/logo4.png"
+            alt="logo"
+            className="w-14 h-14 object-contain"
+          />
         </Link>
       </div>
 
@@ -87,7 +97,6 @@ export default function Header() {
                 {showCart && <CartPreviewModal />}
               </div>
 
-              {/* 🔥 فقط این بخش تغییر کرد */}
               {session?.user ? (
                 <Link
                   href="/dashboard"
@@ -102,7 +111,6 @@ export default function Header() {
                   ) : (
                     <UserIcon className="w-5 h-5" />
                   )}
-
                   {session.user.name}
                 </Link>
               ) : (
@@ -156,7 +164,6 @@ export default function Header() {
             بلاگ
           </Link>
 
-          {/* 🔥 موبایل هم اصلاح شد */}
           {session?.user ? (
             <Link href="/dashboard" className="flex flex-col items-center">
               {session.user.image ? (
@@ -181,7 +188,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* مودال دسته‌بندی موبایل */}
       {showCategories && (
         <CategoryMobileModal onClose={() => setShowCategories(false)} />
       )}
