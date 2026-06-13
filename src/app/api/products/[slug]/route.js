@@ -6,31 +6,39 @@ export async function GET(request, { params }) {
   try {
     await connectToDatabase();
 
-    const id = params?.id?.trim();
+    const slug = params?.slug?.trim();
 
-    if (!id) {
+    if (!slug) {
       return NextResponse.json(
-        { message: "شناسه محصول نامعتبر است" },
+        {
+          message: "شناسه محصول نامعتبر است",
+          success: false,
+        },
         { status: 400 }
       );
     }
 
     let product = null;
 
-    // 1️⃣ تلاش با slug (اولویت اصلی)
-    product = await Product.findOne({ slug: id }).lean();
+    // جستجو بر اساس slug
+    product = await Product.findOne({ slug }).lean();
 
-    // 2️⃣ تلاش با custom numeric id
-    if (!product && !isNaN(id)) {
-      product = await Product.findOne({ id: Number(id) }).lean();
+    // جستجو بر اساس id عددی
+    if (!product && !isNaN(slug)) {
+      product = await Product.findOne({
+        id: Number(slug),
+      }).lean();
     }
 
-    // 3️⃣ تلاش با MongoDB ObjectId
-    if (!product && id.length === 24 && /^[a-fA-F0-9]+$/.test(id)) {
-      product = await Product.findById(id).lean();
+    // جستجو بر اساس ObjectId
+    if (
+      !product &&
+      slug.length === 24 &&
+      /^[a-fA-F0-9]{24}$/.test(slug)
+    ) {
+      product = await Product.findById(slug).lean();
     }
 
-    // ❌ اگر چیزی پیدا نشد
     if (!product) {
       return NextResponse.json(
         {
@@ -41,14 +49,13 @@ export async function GET(request, { params }) {
       );
     }
 
-    // تبدیل _id برای JSON
     return NextResponse.json({
       ...product,
-      _id: product._id?.toString(),
+      _id: product._id.toString(),
       success: true,
     });
   } catch (error) {
-    console.error("❌ PRODUCT API ERROR:", error);
+    console.error("PRODUCT API ERROR:", error);
 
     return NextResponse.json(
       {
