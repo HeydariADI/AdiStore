@@ -6,44 +6,26 @@ export async function GET(request, { params }) {
   try {
     await connectToDatabase();
 
-    const slug = params?.slug?.trim();
+    const slug = params?.slug;
+
+    console.log("DEBUG SLUG:", slug);
 
     if (!slug) {
       return NextResponse.json(
-        {
-          message: "شناسه محصول نامعتبر است",
-          success: false,
-        },
+        { message: "slug نامعتبر است" },
         { status: 400 }
       );
     }
 
-    let product = null;
-
-    // جستجو بر اساس slug
-    product = await Product.findOne({ slug }).lean();
-
-    // جستجو بر اساس id عددی
-    if (!product && !isNaN(slug)) {
-      product = await Product.findOne({
-        id: Number(slug),
-      }).lean();
-    }
-
-    // جستجو بر اساس ObjectId
-    if (
-      !product &&
-      slug.length === 24 &&
-      /^[a-fA-F0-9]{24}$/.test(slug)
-    ) {
-      product = await Product.findById(slug).lean();
-    }
+    const product = await Product.findOne({
+      slug: slug.trim(),
+    }).lean();
 
     if (!product) {
       return NextResponse.json(
         {
           message: "محصول یافت نشد",
-          success: false,
+          slug,
         },
         { status: 404 }
       );
@@ -52,16 +34,12 @@ export async function GET(request, { params }) {
     return NextResponse.json({
       ...product,
       _id: product._id.toString(),
-      success: true,
     });
   } catch (error) {
     console.error("PRODUCT API ERROR:", error);
 
     return NextResponse.json(
-      {
-        message: "خطای سرور",
-        success: false,
-      },
+      { message: "server error" },
       { status: 500 }
     );
   }
