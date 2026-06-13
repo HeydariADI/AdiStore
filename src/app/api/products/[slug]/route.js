@@ -8,7 +8,7 @@ export async function GET(req, { params }) {
   try {
     await connectToDatabase();
 
-    const slug = params?.slug?.trim();
+    const slug = params.slug;
 
     if (!slug) {
       return NextResponse.json(
