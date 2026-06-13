@@ -2,13 +2,13 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@lib/mongodb";
 import Product from "@models/Products";
 
-export async function GET(request, { params }) {
+export const runtime = "nodejs";
+
+export async function GET(req, { params }) {
   try {
     await connectToDatabase();
 
-    const slug = params?.slug;
-
-    console.log("DEBUG SLUG:", slug);
+    const slug = params?.slug?.trim();
 
     if (!slug) {
       return NextResponse.json(
@@ -17,9 +17,8 @@ export async function GET(request, { params }) {
       );
     }
 
-    const product = await Product.findOne({
-      slug: slug.trim(),
-    }).lean();
+    // فقط ONE SOURCE OF TRUTH → slug
+    const product = await Product.findOne({ slug }).lean();
 
     if (!product) {
       return NextResponse.json(
@@ -35,6 +34,7 @@ export async function GET(request, { params }) {
       ...product,
       _id: product._id.toString(),
     });
+
   } catch (error) {
     console.error("PRODUCT API ERROR:", error);
 

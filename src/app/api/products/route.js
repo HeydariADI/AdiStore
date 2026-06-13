@@ -4,28 +4,25 @@ import Product from "@models/Products";
 
 export const runtime = "nodejs";
 
-export async function GET(request) {
+export async function GET(req) {
   try {
     await connectToDatabase();
 
-    const { searchParams } = new URL(request.url);
-
+    const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
 
-    let query = {};
+    const query = category && category !== "all"
+      ? { category }
+      : {};
 
-    // فقط اگر category وجود داشت
-    if (category) {
-      query.category = category;
-    }
-
-    console.log("🔍 Query:", query);
-
-    const products = await Product.find(query).lean();
+    const products = await Product.find(query)
+      .sort({ createdAt: -1 })
+      .lean();
 
     return NextResponse.json(products);
+
   } catch (error) {
-    console.error("❌ Error in products API:", error);
+    console.error("PRODUCTS API ERROR:", error);
 
     return NextResponse.json(
       { error: "Failed to fetch products" },
