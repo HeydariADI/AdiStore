@@ -8,7 +8,9 @@ export async function GET(req, { params }) {
   try {
     await connectToDatabase();
 
-    const slug = params.slug;
+    const slug = params?.slug;
+
+    console.log("🔥 SLUG:", slug);
 
     if (!slug) {
       return NextResponse.json(
@@ -17,26 +19,24 @@ export async function GET(req, { params }) {
       );
     }
 
-    // فقط ONE SOURCE OF TRUTH → slug
-    const product = await Product.findOne({ slug }).lean();
+    const product = await Product.findOne({
+      slug: slug.trim(),
+    }).lean();
 
     if (!product) {
       return NextResponse.json(
-        {
-          message: "محصول یافت نشد",
-          slug,
-        },
+        { message: "محصول یافت نشد" },
         { status: 404 }
       );
     }
 
     return NextResponse.json({
       ...product,
-      _id: product._id.toString(),
+      _id: product._id?.toString(),
     });
 
-  } catch (error) {
-    console.error("PRODUCT API ERROR:", error);
+  } catch (err) {
+    console.error("PRODUCT API ERROR:", err);
 
     return NextResponse.json(
       { message: "server error" },
