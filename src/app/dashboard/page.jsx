@@ -1,91 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-
-  const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (status === "loading") return;
-
-    if (!session) {
-      router.push("/authentication/login");
-      return;
-    }
-
-    fetch("/api/dashboard")
-      .then((res) => {
-        if (!res.ok) throw new Error("Network response was not ok");
-        return res.json();
-      })
-      .then((data) => {
-        setUserData(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("خطا در بارگذاری اطلاعات کاربر");
-        setLoading(false);
-      });
-  }, [session, status, router]);
-
-  if (status === "loading" || loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-amber-50">
-        <p className="text-orange-600 text-xl font-semibold">
-          در حال بارگذاری...
-        </p>
-      </div>
-    );
-  }
-
-  if (!session) return null;
+  const { data: session } = useSession();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-amber-50 p-4">
-      <div className="m-auto w-full sm:w-3/4 lg:w-2/3 p-6 bg-white rounded-3xl shadow-2xl">
-        <h1 className="text-3xl font-bold text-orange-600 mb-4">
-          خوش آمدی، {userData?.user?.name || userData?.user?.email}!
-        </h1>
+    <div className="p-6">
 
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+      <h1 className="text-2xl font-bold mb-8">
+        👋 خوش آمدی {session?.user?.name || "کاربر"}
+      </h1>
 
-        <h2 className="text-xl font-semibold mb-3">سفارشات اخیر</h2>
-        {userData?.orders?.length > 0 ? (
-          <ul className="space-y-2 mb-6">
-            {userData.orders.map((order) => (
-              <li
-                key={order._id}
-                className="border border-gray-200 rounded-lg p-3 flex flex-col sm:flex-row justify-between items-start sm:items-center"
-              >
-                <span>سفارش #{order._id}</span>
-                <span>تعداد محصولات: {order.products.length}</span>
-                <span>
-                  مجموع:{" "}
-                  {order.products.reduce((sum, p) => sum + (p.price || 0), 0)}{" "}
-                  تومان
-                </span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-600 mb-6">سفارشی یافت نشد.</p>
-        )}
+      {/* Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        <button
-          onClick={() => signOut({ callbackUrl: "/authentication/login" })}
-          className="w-full bg-red-600 text-white py-3 rounded-xl text-lg font-semibold shadow-lg hover:bg-red-700 transition"
-        >
-          خروج
-        </button>
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">کاربران</p>
+          <h2 className="text-2xl font-bold">1,240</h2>
+        </div>
+
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">سفارش‌ها</p>
+          <h2 className="text-2xl font-bold">320</h2>
+        </div>
+
+        <div className="bg-white p-5 rounded-xl shadow">
+          <p className="text-gray-500">محصولات</p>
+          <h2 className="text-2xl font-bold">85</h2>
+        </div>
+
       </div>
+
     </div>
   );
 }
