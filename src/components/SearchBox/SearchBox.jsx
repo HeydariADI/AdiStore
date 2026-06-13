@@ -69,7 +69,7 @@ export default function SearchBox({ categories = [] }) {
 
   return (
     <div className="relative w-2/3">
-      <div className="flex items-center bg-gray-200 rounded-lg px-3 py-1 md:px-6 ">
+      <div className="flex items-center  rounded-lg px-3 py-1 md:px-6 ">
         <FaSearch size={20} color="#e86908" />
         <input
           ref={inputRef}
@@ -79,7 +79,7 @@ export default function SearchBox({ categories = [] }) {
           placeholder={focused ? "جستجو در همه محصولات..." : "جستجو..."}
           onFocus={() => setFocused(true)}
           onBlur={() => setTimeout(() => setFocused(false), 200)}
-          className="flex-1 outline-none bg-transparent p-2"
+          className="flex-1 outline-none bg-gray-100 p-4 focus:border-amber-500"
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         />
       </div>

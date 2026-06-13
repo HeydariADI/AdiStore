@@ -37,7 +37,7 @@ export default function Header() {
         
         {/* سرچ کشیده‌تر و طبیعی‌تر */}
         <div className="flex-1">
-          <div className="w-full rounded-full  focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-400 transition shadow-sm">
+          <div className="w-full rounded-lg bg-gray-100 focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-400 transition shadow-sm">
             <SearchBox />
           </div>
         </div>
