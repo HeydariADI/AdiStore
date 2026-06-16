@@ -1,8 +1,10 @@
-export async function GET(req, { params }) {
-
-    console.log("params:", params);
+export async function GET(req, context) {
   try {
     await connectToDatabase();
+
+    const { params } = context;
+
+    console.log("params:", params);
 
     const slug = params?.slug?.toLowerCase().trim();
 
