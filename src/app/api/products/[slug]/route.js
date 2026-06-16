@@ -1,14 +1,8 @@
-import { NextResponse } from "next/server";
-import { connectToDatabase } from "@lib/mongodb";
-import Product from "@models/Products";
-
-export const runtime = "nodejs";
-
 export async function GET(req, { params }) {
   try {
     await connectToDatabase();
 
-    const slug = params?.slug;
+    const slug = params?.slug?.toLowerCase().trim();
 
     console.log("🔥 SLUG:", slug);
 
@@ -20,10 +14,12 @@ export async function GET(req, { params }) {
     }
 
     const product = await Product.findOne({
-      slug: slug.trim(),
+      slug: { $regex: new RegExp(`^${slug}$`, "i") }
     }).lean();
 
     if (!product) {
+      console.log("❌ NOT FOUND IN DB:", slug);
+
       return NextResponse.json(
         { message: "محصول یافت نشد" },
         { status: 404 }

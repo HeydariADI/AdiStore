@@ -11,6 +11,8 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  console.log("PAGE SLUG:", slug);
+
   useEffect(() => {
     if (!slug) return;
 
@@ -18,7 +20,9 @@ export default function ProductDetail() {
       try {
         setLoading(true);
 
-        const res = await fetch(`/api/products/${slug}`);
+      const res = await fetch(`/api/products/${slug}`, {
+  cache: "no-store",
+});
 
         if (!res.ok) {
           setProduct(null);
