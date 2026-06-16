@@ -1,4 +1,6 @@
 export async function GET(req, { params }) {
+
+    console.log("params:", params);
   try {
     await connectToDatabase();
 
