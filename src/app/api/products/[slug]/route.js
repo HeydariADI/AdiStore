@@ -2,11 +2,7 @@ export async function GET(req, context) {
   try {
     await connectToDatabase();
 
-    const { params } = context;
-
-    console.log("params:", params);
-
-    const slug = params?.slug?.toLowerCase().trim();
+    const slug = context?.params?.slug;
 
     console.log("🔥 SLUG:", slug);
 
@@ -18,12 +14,10 @@ export async function GET(req, context) {
     }
 
     const product = await Product.findOne({
-      slug: { $regex: new RegExp(`^${slug}$`, "i") }
+      slug: slug.toLowerCase().trim(),
     }).lean();
 
     if (!product) {
-      console.log("❌ NOT FOUND IN DB:", slug);
-
       return NextResponse.json(
         { message: "محصول یافت نشد" },
         { status: 404 }
