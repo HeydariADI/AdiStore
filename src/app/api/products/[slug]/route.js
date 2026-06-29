@@ -1,8 +1,14 @@
+import { NextResponse } from "next/server";
+import { connectToDatabase } from "@/lib/mongodb";
+import Product from "@/models/Products";
+
+export const runtime = "nodejs";
+
 export async function GET(req, context) {
   try {
     await connectToDatabase();
 
-    const slug = context?.params?.slug;
+    const slug = context.params?.slug;
 
     console.log("🔥 SLUG:", slug);
 
@@ -14,7 +20,7 @@ export async function GET(req, context) {
     }
 
     const product = await Product.findOne({
-      slug: slug.toLowerCase().trim(),
+      slug: slug.trim().toLowerCase(),
     }).lean();
 
     if (!product) {
@@ -26,9 +32,8 @@ export async function GET(req, context) {
 
     return NextResponse.json({
       ...product,
-      _id: product._id?.toString(),
+      _id: product._id.toString(),
     });
-
   } catch (err) {
     console.error("PRODUCT API ERROR:", err);
 
