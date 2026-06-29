@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/mongodb";
-import Product from "@/models/Products";
+import { connectToDatabase } from "@lib/mongodb";
+import Products from "@models/Products";
+
 
 export const runtime = "nodejs";
 
@@ -19,7 +20,7 @@ export async function GET(req, context) {
       );
     }
 
-    const product = await Product.findOne({
+    const product = await Products.findOne({
       slug: slug.trim().toLowerCase(),
     }).lean();
 
