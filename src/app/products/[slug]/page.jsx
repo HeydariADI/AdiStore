@@ -169,7 +169,7 @@ export default function ProductDetail() {
           <div className="sticky top-24 border rounded-xl bg-white p-6 shadow-sm">
 
             <p className="text-gray-500">
-              Price
+             AdiStore
             </p>
 
             <h2 className="text-3xl font-bold my-5">
@@ -178,12 +178,16 @@ export default function ProductDetail() {
 
             </h2>
 
+            <p>😍 بهترین قیمت در 30 روز گذشته</p>
+
             <button
               onClick={() => addToCart(product)}
               className="w-full bg-red-600 text-white rounded-lg py-3 hover:bg-red-700 transition"
             >
-              Add To Cart
+              افزودن به سبد خرید
             </button>
+            <br/>
+            <p>🔅18 ماه گارانتی</p>
 
           </div>
 
